@@ -70,7 +70,7 @@ jobs:
       
       - run : ls
       - name: Copy Client
-        run: mv ./RebrickableApiClient/RebrickableApiClient.cs ./src/Rebrickable/Rebrickable.Api/
+        run: mv ./RebrickableApiClient.cs ./src/Rebrickable/Rebrickable.Api/
 
       - name: Commit New Client
         # You may pin to the exact commit or the version.
