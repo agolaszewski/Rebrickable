@@ -10,30 +10,19 @@ env:
   REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi"
 
 jobs:
-  Update:
+  Check:
     runs-on: ubuntu-latest
     steps:
-    
     - name: Event
       run: echo '${{ toJSON(github) }}'
-    
-    - name: Download runner
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: rebrickable_generator_build.yml
-        workflow_conclusion: success
-        
-    - name: Update Executable Permissions
-      working-directory: ./RebrickableGeneratorExecutable
-      run: chmod 777 Rebrickable.Generator
       
     - name: Download a file
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
+      
+    - name: Hash PR name
+      run: cksum rebrickable_schema.json
+
+      
+    
   
-    - name: Genearate hash
-      uses: MCJack123/ghaction-generate-release-hashes@v1
-      with:
-        hash-type: sha1
-        file-name: rebrickable_schema.json
       
