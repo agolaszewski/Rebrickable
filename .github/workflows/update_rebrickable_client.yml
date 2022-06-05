@@ -46,9 +46,17 @@ jobs:
     - name: Update Executable Permissions
       working-directory: ./RebrickableGeneratorExecutable
       run: chmod 777 Rebrickable.Generator
-    - name: Update PLOPLN3M
+      
+    - name: Update Client File
       run: |
          ./RebrickableGeneratorExecutable/Rebrickable.Generator ${{ env.REBRICKABLE_API_URL }} >> ./RebrickableGeneratorExecutable/RebrickableApiClient.cs
+         
+    - name: Upload Client File Artifact
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: RebrickableApiClient
+        path: ./RebrickableGeneratorExecutable/RebrickableApiClient.cs
+        retention-days: 5
       
     
   
