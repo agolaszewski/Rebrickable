@@ -32,6 +32,7 @@ jobs:
       run: echo "::set-output name=hash::${{ env.SCHEMA_HASH }}"
     
   generator:
+    continue-on-error : false
     #if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
     runs-on: ubuntu-latest 
     steps:
