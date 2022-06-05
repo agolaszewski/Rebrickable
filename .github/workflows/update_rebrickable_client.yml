@@ -36,8 +36,6 @@ jobs:
     needs: check
     runs-on: ubuntu-latest 
     steps:
-    - name: echo
-      run: echo ${{ needs.check.outputs.schema_new_hash }} | echo ${{ needs.check.outputs.schema_old_hash }}
     - name: Download runner2
       uses: dawidd6/action-download-artifact@v2
       with:
@@ -48,6 +46,9 @@ jobs:
     - name: Update Executable Permissions
       working-directory: ./RebrickableGeneratorExecutable
       run: chmod 777 Rebrickable.Generator
+    - name: Update PLOPLN3M
+      run: |
+         ./RebrickableGeneratorExecutable/Rebrickable.Generator ${{ env.REBRICKABLE_API_URL }}
       
     
   
