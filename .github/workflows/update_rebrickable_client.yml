@@ -20,7 +20,7 @@ jobs:
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
     - name: Get current schema hash
-      run: sha256sum  rebrickable_schema.json
+      run: sha256sum  rebrickable_schema.json | akw '{print $1}'
 
       
     
