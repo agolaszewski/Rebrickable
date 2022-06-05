@@ -30,4 +30,10 @@ jobs:
       
     - name: Download a file
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
+  
+    - name: Download a file
+    - uses: MCJack123/ghaction-generate-release-hashes@v1
+      with:
+        hash-type: sha1
+        file-name: rebrickable_schema.json
       
