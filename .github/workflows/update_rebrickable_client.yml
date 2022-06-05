@@ -19,7 +19,7 @@ jobs:
     - name: Download a file
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
-    - name: Hash PR name
+    - name: Hash PR name2
       run: cksum rebrickable_schema.json
 
       
