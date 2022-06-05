@@ -11,8 +11,11 @@ env:
   SCHEMA_HASH : ${{ secrets.SCHEMA_HASH }}
 
 jobs:
-  Check:
+  check:
     runs-on: ubuntu-latest
+    outputs:
+     schema_new_hash: ${{ steps.schema_new.outputs.hash }}
+     schema_old_hash: ${{ steps.schema_old.outputs.hash }}
     steps:
     - name: Event
       run: echo '${{ toJSON(github) }}'
@@ -21,10 +24,15 @@ jobs:
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
     - name: Set current schema hash
-      run: echo "SCHEMA_CURRENT_SHA=$(sha256sum  rebrickable_schema.json | awk '{print $1}')" >> $GITHUB_ENV
+      id: schema_new
+      run: echo "::set-output name=hash::$(sha256sum  rebrickable_schema.json | awk '{print $1}')"
+      
+    - name: Set current schema hash
+      id: schema_old
+      run: echo "::set-output name=hash::${{ secrets.SCHEMA_HASH }}"
     
-  Generator:
-    if: ${{ env.SCHEMA_HASH != env.SCHEMA_CURRENT_SHA }}
+  generator:
+    if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
     runs-on: ubuntu-latest 
     steps: 
     - name: Download runner
