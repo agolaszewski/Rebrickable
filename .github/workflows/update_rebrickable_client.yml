@@ -29,7 +29,7 @@ jobs:
       
     - name: Set current schema hash
       id: schema_old
-      run: echo "::set-output name=hash::${{ secrets.SCHEMA_HASH }}"
+      run: echo "::set-output name=hash::${{ env.SCHEMA_HASH }}"
     
   generator:
     if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
