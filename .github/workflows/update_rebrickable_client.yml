@@ -48,7 +48,7 @@ jobs:
       run: chmod 777 Rebrickable.Generator
     - name: Update PLOPLN3M
       run: |
-         ./RebrickableGeneratorExecutable/Rebrickable.Generator ${{ env.REBRICKABLE_API_URL }}
+         ./RebrickableGeneratorExecutable/Rebrickable.Generator ${{ env.REBRICKABLE_API_URL }} >> ./src/Rebrickable/Rebrickable.Api/RebrickableApiClient.cs
       
     
   
