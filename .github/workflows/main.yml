@@ -1,0 +1,27 @@
+name: Update Wibor Rates
+
+on:
+  push:
+    paths: ".github/workflows/update_wibor_rates.yml"
+  schedule:
+  - cron : "0 1 * * SUN"
+
+jobs:
+  Update:
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Event
+      run: echo '${{ toJSON(github) }}'
+    
+    - name: Download runner
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        workflow: rebrickable_generator_build.yml
+        workflow_conclusion: success
+        
+    - name: Update Executable Permissions
+      working-directory: ./RebrickableGeneratorExecutable
+      run: chmod 777 Rebrickable.Generator
+      
