@@ -33,5 +33,5 @@ jobs:
       with:
         # Artifact name
         name: RebrickableGeneratorExecutable
-        path: /home/runner/work/Rebrickable/Rebrickable/src/release/
+        path: /home/runner/work/Rebrickable/Rebrickable/src/Rebrickable/Rebrickable.Generator/release/
       
