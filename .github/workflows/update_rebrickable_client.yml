@@ -34,7 +34,9 @@ jobs:
   generator:
     if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
     runs-on: ubuntu-latest 
-    steps: 
+    steps:
+    - name: echo
+      run: echo ${{ needs.check.outputs.schema_new_hash }} | echo ${{ needs.check.outputs.schema_old_hash }}
     - name: Download runner2
       uses: dawidd6/action-download-artifact@v2
       with:
