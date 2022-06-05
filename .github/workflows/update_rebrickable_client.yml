@@ -8,7 +8,7 @@ on:
 
 env:
   REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi"
-  SCHEMA_HASH : "X"
+  SCHEMA_HASH : ${{ secrets.SCHEMA_HASH }}
 
 jobs:
   check:
@@ -32,7 +32,7 @@ jobs:
       run: echo "::set-output name=hash::${{ env.SCHEMA_HASH }}"
     
   generator:
-    if: ${{ needs.check.outputs.schema_new_hash != secrets.SCHEMA_HASH }}
+    if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
     needs: check
     runs-on: ubuntu-latest 
     steps:
