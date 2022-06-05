@@ -7,7 +7,8 @@ on:
   - cron : "0 1 * * SUN"
 
 env:
-  REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi"
+  REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi",
+  SCHEMA_HASH : ${{ secrets.SCHEMA_HASH }}
 
 jobs:
   Check:
@@ -19,9 +20,23 @@ jobs:
     - name: Download a file
       run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
-    - name: Get current schema hash
-      run: sha256sum  rebrickable_schema.json | awk '{print $1}'
-
+    - name: Set current schema hash
+      run: echo "SCHEMA_CURRENT_SHA=$(sha256sum  rebrickable_schema.json | awk '{print $1}')" >> $GITHUB_ENV
+    
+  Generator:
+    if: ${{ env.SCHEMA_HASH != env.SCHEMA_CURRENT_SHA }}
+    runs-on: ubuntu-latest 
+    steps: 
+    - name: Download runner
+      uses: dawidd6/action-download-artifact@v2
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        workflow: rebrickable_generator_build.yml
+        workflow_conclusion: success
+        
+    - name: Update Executable Permissions
+      working-directory: ./RebrickableGeneratorExecutable
+      run: chmod 777 Rebrickable.Generator
       
     
   
