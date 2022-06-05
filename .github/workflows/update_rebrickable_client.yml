@@ -7,7 +7,7 @@ on:
   - cron : "0 1 * * SUN"
 
 env:
-  REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi",
+  REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi"
   SCHEMA_HASH : ${{ secrets.SCHEMA_HASH }}
 
 jobs:
