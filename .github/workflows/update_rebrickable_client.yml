@@ -2,7 +2,7 @@ name: Update Wibor Rates
 
 on:
   push:
-    paths: ".github/workflows/update_wibor_rates.yml"
+    paths: ".github/workflows/update_rebrickable_client.yml"
   schedule:
   - cron : "0 1 * * SUN"
 
