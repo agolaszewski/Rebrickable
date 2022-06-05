@@ -1,10 +1,13 @@
-name: Update Wibor Rates
+name: Update Rebrickable Client
 
 on:
   push:
     paths: ".github/workflows/update_rebrickable_client.yml"
   schedule:
   - cron : "0 1 * * SUN"
+
+env:
+  REBRICKABLE_API_URL : "https://rebrickable.com/api/v3/swagger/?format=openapi"
 
 jobs:
   Update:
@@ -24,4 +27,7 @@ jobs:
     - name: Update Executable Permissions
       working-directory: ./RebrickableGeneratorExecutable
       run: chmod 777 Rebrickable.Generator
+      
+    - name: Download a file
+      run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
