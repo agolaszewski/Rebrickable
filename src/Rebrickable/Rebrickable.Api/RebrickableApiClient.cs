@@ -18,13 +18,13 @@ namespace Rebrickable.Api
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class ColorsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public ColorsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -506,13 +506,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class ElementsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public ElementsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -719,13 +719,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class MinifigsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public MinifigsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -1239,13 +1239,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class PartsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public PartsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -2622,13 +2622,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class SetsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public SetsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -4269,13 +4269,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class CategoriesClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public CategoriesClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -4582,13 +4582,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class AlternatesClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public AlternatesClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -4814,13 +4814,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class ThemesClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public ThemesClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -5127,13 +5127,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class SwaggerClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public SwaggerClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -5330,13 +5330,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class TokenClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public TokenClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -5553,13 +5553,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class BadgesClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public BadgesClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -5866,13 +5866,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class AllpartsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public AllpartsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -6104,13 +6104,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class BuildClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public BuildClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -6321,13 +6321,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class PartlistsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public PartlistsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -6883,13 +6883,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class PartialClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public PartialClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -7293,13 +7293,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class ProfileClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public ProfileClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -7506,13 +7506,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class SetlistsClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public SetlistsClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
@@ -8068,13 +8068,13 @@ namespace Rebrickable.Api
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class RebrickableApiClient 
+    public partial class SyncClient 
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
         private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
-        public RebrickableApiClient(System.Net.Http.HttpClient httpClient)
+        public SyncClient(System.Net.Http.HttpClient httpClient)
         {
             _httpClient = httpClient;
             _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
