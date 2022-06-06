@@ -5,6 +5,8 @@ on:
     paths:
       - 'src/Rebrickable/Rebrickable.Generator/**'
       - '.github/workflows/rebrickable_generator_build.yml'
+  schedule:
+      - cron : "0 0 1 * *"
       
 concurrency: 
   group: ${GITHUB_REF#refs/heads/} 
@@ -34,4 +36,5 @@ jobs:
         # Artifact name
         name: RebrickableGeneratorExecutable
         path: /home/runner/work/Rebrickable/Rebrickable/src/Rebrickable/Rebrickable.Generator/release/
+        retention-days: 33
       
