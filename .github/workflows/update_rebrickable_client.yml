@@ -99,7 +99,8 @@ jobs:
         run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.${{ secrets.NUGET_VERSION }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-  setup:
+        
+  post-setup:
     runs-on: ubuntu-latest
     needs: publish
     steps:
@@ -116,7 +117,7 @@ jobs:
       - name: update hash schema
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
-          name: 'NUGET_VERSION'
+          name: 'SCHEMA_HASH'
           value: needs.check.outputs.schema_new_hash
           repository: agolaszewski/Rebrickable
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
