@@ -61,9 +61,14 @@ jobs:
 
   generate:
     if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
-    needs: check
+    needs: [ setup, check ]
     runs-on: ubuntu-latest
     steps:
+      - name: Test Variables
+        run : |
+              echo ${{ needs.check.outputs.schema_new_hash }}
+              echo ${{ needs.setup.outputs.schema_hash }}
+              
       - name: Download runner
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -105,16 +110,16 @@ jobs:
         with:
           author_name: "Automation"
           message: "New Client File"
+          
   publish:
     runs-on: ubuntu-latest
     #if : false
-    needs : commit
+    needs : [ setup, commit ]
     defaults:
       run:
         working-directory: ./src/Rebrickable/Rebrickable.Api/
     steps:
       - uses: actions/checkout@v2
-      - run:  echo $NUGET_VERSION
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
