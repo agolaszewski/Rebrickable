@@ -23,7 +23,8 @@ jobs:
       - name: Set env vars from settings.json
         id: configuration
         run: | 
-        
+               ls
+               
                if [[ -f ./settings.json ]]
                then
                     echo 'SETTINGS_JSON<<EOF' >> $GITHUB_ENV
@@ -31,7 +32,7 @@ jobs:
                     echo 'EOF' >> $GITHUB_ENV
                fi
                
-               if [ -z "$SETTINGS_JSON" ]
+               if [ -z $SETTINGS_JSON ]
                then
                     echo "::set-output name=schema_hash::$(echo '1' )"
                     echo "::set-output name=package_version::$(echo '1' )"
