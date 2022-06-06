@@ -129,7 +129,7 @@ jobs:
       - name: Build
         run: dotnet build Rebrickable.Api.csproj -c Release --no-restore
       - name: Pack
-        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.${{ needs.setup.outputs.package_version }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=3.0.${{ needs.setup.outputs.package_version }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
   post-setup:
@@ -143,7 +143,7 @@ jobs:
           
                $newPackageVersion = ${{ needs.setup.outputs.package_version }} + 1
                $settings = [PSCustomObject]@{
-                    schemaHash     = ${{ needs.setup.outputs.schema_hash }}
+                    schemaHash     = ${{ needs.check.outputs.schema_new_hash }}
                     packageVersion = $newPackageVersion
                }
                Write-Host ($settings | Format-Table | Out-String)
