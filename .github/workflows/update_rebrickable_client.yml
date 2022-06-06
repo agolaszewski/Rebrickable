@@ -69,7 +69,6 @@ jobs:
         with:
           name: RebrickableApiClient
       
-      - run : ls
       - name: Copy Client
         run: mv ./RebrickableApiClient.cs ./src/Rebrickable/Rebrickable.Api/
 
@@ -82,6 +81,7 @@ jobs:
           message: "New Client File"
   build:
     runs-on: ubuntu-latest
+    needs : commit
     defaults:
       run:
         working-directory: ./src/Rebrickable/Rebrickable.Api/
