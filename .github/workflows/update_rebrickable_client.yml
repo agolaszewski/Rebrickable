@@ -23,7 +23,7 @@ jobs:
           workflow_conclusion: success
           
       - name: Update Executable Permissions
-      - run: | 
+        run: | 
                echo 'SETTINGS_JSON<<EOF' >> $GITHUB_ENV
                cat ./settings.json >> $GITHUB_ENV
                echo 'EOF' >> $GITHUB_ENV
@@ -38,7 +38,7 @@ jobs:
                fi
                
       - name: Test Varaibles
-      - run : |
+        run : |
               echo $SCHEMA_HASH
               echo $NUGET_VERSION
                
