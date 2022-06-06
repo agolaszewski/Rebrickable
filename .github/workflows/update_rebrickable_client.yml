@@ -100,27 +100,7 @@ jobs:
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
         
-  post-setup:
-    runs-on: ubuntu-latest
-    needs: publish
-    steps:
-      - name: update version
-        run: echo "NUGET_VERSION=$(echo $NUGET_VERSION + 1)" >> $GITHUB_ENV
-      - name: update version
-        uses: hmanzur/actions-set-secret@v2.0.0
-        with:
-          name: 'NUGET_VERSION'
-          value: ${{ env.NUGET_VERSION }}
-          repository: agolaszewski/Rebrickable
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
-          
-      - name: update hash schema
-        uses: hmanzur/actions-set-secret@v2.0.0
-        with:
-          name: 'SCHEMA_HASH'
-          value: needs.check.outputs.schema_new_hash
-          repository: agolaszewski/Rebrickable
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+  
     
 
 
