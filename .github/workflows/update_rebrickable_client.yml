@@ -109,7 +109,7 @@ jobs:
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
           name: 'NUGET_VERSION'
-          value: ${{ secrets.NUGET_VERSION + 1 }}
+          value: ${{ secrets.NUGET_VERSION }} + 1
           repository: agolaszewski/Rebrickable
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
     
