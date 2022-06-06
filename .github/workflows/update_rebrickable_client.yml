@@ -9,6 +9,7 @@ on:
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
   SCHEMA_HASH: ${{ secrets.SCHEMA_HASH }}
+  NUGET_VERSION: ${{ secrets.NUGET_VERSION }}
 
 jobs:
   check:
@@ -81,7 +82,7 @@ jobs:
           message: "New Client File"
   publish:
     runs-on: ubuntu-latest
-    if : false
+    #if : false
     needs : commit
     defaults:
       run:
@@ -97,18 +98,18 @@ jobs:
       - name: Build
         run: dotnet build Rebrickable.Api.csproj -c Release --no-restore
       - name: Pack
-        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.1 --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.${{ secret.NUGET_VERSION }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
   setup:
     runs-on: ubuntu-latest
-    #needs: publish
+    needs: publish
     steps:
       - name: herp
         uses: hmanzur/actions-set-secret@v2.0.0
         with:
-          name: 'MY_SECRET_NAME'
-          value: 'Lorem ipsun dolor simit'
+          name: 'NUGET_VERSION'
+          value: ${{ secret.NUGET_VERSION + 1 }}
           repository: agolaszewski/Rebrickable
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
     
