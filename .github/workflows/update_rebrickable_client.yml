@@ -8,9 +8,6 @@ on:
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
-  SCHEMA_HASH: ${{ secrets.SCHEMA_HASH }}
-  NUGET_VERSION: ${{ secrets.NUGET_VERSION }}
-
 jobs:
   setup:
     runs-on: ubuntu-latest
