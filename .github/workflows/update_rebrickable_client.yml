@@ -134,11 +134,18 @@ jobs:
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
   post-setup:
       runs-on: ubuntu-latest
-      needs: publish
+      needs: [ setup, publish ]
       steps:
-        - name: update version
-          run: echo "NUGET_VERSION=$(echo $NUGET_VERSION + 1)" >> $GITHUB_ENV
-        
+        - name: Build
+          shell: pwsh
+          run: |
+               $settings = [PSCustomObject]@{
+                    schemaHash     = ${{ needs.setup.outputs.schema_hash }}
+                    packageVersion = ${{ needs.setup.outputs.package_version }}
+               }
+               Write-Host ($settings | Format-Table | Out-String)
+               $settings | ConvertTo-Json | Out-File "./settings.json"
+               Get-Content -Path "./settings.json"
         
   
     
