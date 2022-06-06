@@ -8,13 +8,20 @@ on:
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
-  NUGET_VERSION : 0
 jobs:
   setup:
     runs-on: ubuntu-latest
+    outputs:
+      schema_hash: ${{ steps.configuration.outputs.schema_hash }}
+      package_version: ${{ steps.configuration.outputs.package_version }}
     steps:
-      - uses: actions/checkout@v2  
+      - uses: actions/checkout@v2 
+      
+      - name: Event
+        run: echo '${{ toJSON(github) }}'
+        
       - name: Set env vars from settings.json
+        id: configuration
         run: | 
         
                if [[ -f ./settings.json ]]
@@ -26,28 +33,25 @@ jobs:
                
                if [ -z "$SETTINGS_JSON" ]
                then
-                    echo "SCHEMA_HASH=$(echo '1' )" >> $GITHUB_ENV
-                    echo "NUGET_VERSION=$(echo 1 )" >> $GITHUB_ENV
+                    echo "::set-output name=schema_hash::$(echo '1' )"
+                    echo "::set-output name=package_version::$(echo '1' )"
                else
-                    echo "SCHEMA_HASH=$(echo $SETTINGS_JSON | jq -r '.schemaHash' )" >> $GITHUB_ENV
-                    echo "NUGET_VERSION=$(echo $SETTINGS_JSON | jq -r '.nugetVersion' )" >> $GITHUB_ENV
+                    echo "::set-output name=schema_hash::$(echo $SETTINGS_JSON | jq -r '.schemaHash' )"
+                    echo "::set-output name=package_version::$(echo $SETTINGS_JSON | jq -r '.packageVersion' )"
                fi
                
-      - name: Test Varaibles
+      - name: Test Variables
         run : |
-              echo $SCHEMA_HASH
-              echo $NUGET_VERSION
+              echo ${{ steps.configuration.outputs.schema_hash }}
+              echo ${{ steps.configuration.outputs.package_version }}
                
   check:
     runs-on: ubuntu-latest
     needs: setup
     outputs:
       schema_new_hash: ${{ steps.schema_new.outputs.hash }}
-      schema_old_hash: ${{ steps.schema_old.outputs.hash }}
     steps:
-      - name: Event
-        run: echo '${{ toJSON(github) }}'
-
+      
       - name: Download a file
         run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
 
@@ -55,12 +59,8 @@ jobs:
         id: schema_new
         run: echo "::set-output name=hash::$(sha256sum  rebrickable_schema.json | awk '{print $1}')"
 
-      - name: Set current schema hash
-        id: schema_old
-        run: echo "::set-output name=hash::${{ env.SCHEMA_HASH }}"
-
   generate:
-    if: ${{ needs.check.outputs.schema_new_hash != needs.check.outputs.schema_old_hash }}
+    if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
     needs: check
     runs-on: ubuntu-latest
     steps:
@@ -124,7 +124,7 @@ jobs:
       - name: Build
         run: dotnet build Rebrickable.Api.csproj -c Release --no-restore
       - name: Pack
-        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.${{ env.NUGET_VERSION }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.${{ needs.setup.outputs.package_version }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
   post-setup:
