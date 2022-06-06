@@ -134,18 +134,26 @@ jobs:
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
   post-setup:
       runs-on: ubuntu-latest
-      needs: [ setup, publish ]
+      needs: [ setup, check, publish ]
       steps:
         - name: Build
           shell: pwsh
           run: |
+          
+               $newPackageVersion = ${{ needs.setup.outputs.package_version }} + 1
                $settings = [PSCustomObject]@{
                     schemaHash     = ${{ needs.setup.outputs.schema_hash }}
-                    packageVersion = ${{ needs.setup.outputs.package_version }}
+                    packageVersion = $newPackageVersion
                }
                Write-Host ($settings | Format-Table | Out-String)
                $settings | ConvertTo-Json | Out-File "./settings.json"
                Get-Content -Path "./settings.json"
+               
+        - name: Update Settings
+          uses: EndBug/add-and-commit@v9.0.0
+          with:
+            author_name: "Automation"
+            message: "Update settings.json"
         
   
     
