@@ -5,7 +5,7 @@ var document = await OpenApiDocument.FromUrlAsync("https://rebrickable.com/api/v
 var clientSettings = new CSharpClientGeneratorSettings
 {
     
-    ClassName = "RebrickableApiClient",
+    ClassName = "{controller}Client",
     CSharpGeneratorSettings =
     {
         Namespace = "Rebrickable.Api",
