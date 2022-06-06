@@ -32,8 +32,8 @@ jobs:
                
                if [ -z "$SETTINGS_JSON" ]
                then
-                    echo "SCHEMA_HASH=$(echo '0' )" >> $GITHUB_ENV
-                    echo "NUGET_VERSION=$(echo 0 )" >> $GITHUB_ENV
+                    echo "SCHEMA_HASH=$(echo '1' )" >> $GITHUB_ENV
+                    echo "NUGET_VERSION=$(echo 1 )" >> $GITHUB_ENV
                else
                     echo "SCHEMA_HASH=$(echo $SETTINGS_JSON | jq -r '.schemaHash' )" >> $GITHUB_ENV
                     echo "NUGET_VERSION=$(echo $SETTINGS_JSON | jq -r '.nugetVersion' )" >> $GITHUB_ENV
