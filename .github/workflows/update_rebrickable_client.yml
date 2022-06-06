@@ -30,6 +30,8 @@ jobs:
                     echo 'SETTINGS_JSON<<EOF' >> $GITHUB_ENV
                     cat ./settings.json >> $GITHUB_ENV
                     echo 'EOF' >> $GITHUB_ENV
+                    echo $SETTINGS_JSON
+                    echo "lol"
                fi
                
                if [ -z $SETTINGS_JSON ]
