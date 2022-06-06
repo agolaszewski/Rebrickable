@@ -15,7 +15,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-      - name: Download runner
+      - name: Download settings
         uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
@@ -38,7 +38,7 @@ jobs:
                fi
                
       - name: Test Varaibles
-        run : |
+      - run : |
               echo $SCHEMA_HASH
               echo $NUGET_VERSION
                
