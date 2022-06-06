@@ -23,8 +23,6 @@ jobs:
       - name: Set env vars from settings.json
         id: configuration
         run: | 
-               settings = ""
-               
                if [[ -f ./settings.json ]]
                then
                     settings = cat ./settings.json
