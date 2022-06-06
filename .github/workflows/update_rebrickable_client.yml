@@ -81,6 +81,7 @@ jobs:
           message: "New Client File"
   publish:
     runs-on: ubuntu-latest
+    if : false
     needs : commit
     defaults:
       run:
@@ -99,6 +100,17 @@ jobs:
         run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.1 --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
         run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+  setup:
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: herp
+        uses: hmanzur/actions-set-secret@v2.0.0
+        with:
+          name: 'MY_SECRET_NAME'
+          value: 'Lorem ipsun dolor simit'
+          repository: agolaszewski/Rebrickable
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
     
 
 
