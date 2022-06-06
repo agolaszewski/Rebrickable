@@ -27,9 +27,8 @@ jobs:
                
                if [[ -f ./settings.json ]]
                then
-                    echo 'SETTINGS_JSON<<EOF' >> $GITHUB_ENV
-                    cat ./settings.json >> $GITHUB_ENV
-                    echo 'EOF' >> $GITHUB_ENV
+                    echo "SETTINGS_JSON=$(cat ./settings.json)" >> $GITHUB_ENV
+                    cat ./settings.json
                     echo $SETTINGS_JSON
                     echo "lol"
                fi
