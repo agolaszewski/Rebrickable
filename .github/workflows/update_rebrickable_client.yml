@@ -98,7 +98,7 @@ jobs:
       - name: Pack
         run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=0.0.1 --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
       - name: Push to Nuget
-        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
+        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
     
 
 
