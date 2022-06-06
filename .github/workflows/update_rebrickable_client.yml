@@ -87,8 +87,6 @@ jobs:
         working-directory: ./src/Rebrickable/Rebrickable.Api/
     steps:
       - uses: actions/checkout@v2
-      - name: Publish
-        run: dotnet pack Rebrickable.Api.csproj -c Release --no-restore
       - name: Publish NuGet
         uses: brandedoutcast/publish-nuget@v2.5.5
         with:
