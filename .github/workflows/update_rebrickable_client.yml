@@ -8,6 +8,7 @@ on:
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
+  NUGET_VERSION : 0
 jobs:
   setup:
     runs-on: ubuntu-latest
@@ -113,7 +114,7 @@ jobs:
         working-directory: ./src/Rebrickable/Rebrickable.Api/
     steps:
       - uses: actions/checkout@v2
-      - run:  echo $SCHEMA_HASH
+      - run:  echo $NUGET_VERSION
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
