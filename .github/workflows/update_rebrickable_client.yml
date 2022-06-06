@@ -23,23 +23,22 @@ jobs:
       - name: Set env vars from settings.json
         id: configuration
         run: | 
-               ls
+               $settings = null
                
                if [[ -f ./settings.json ]]
                then
-                    echo "SETTINGS_JSON=$(cat ./settings.json)" >> $GITHUB_ENV
-                    cat ./settings.json
-                    echo $SETTINGS_JSON
+                    $settings = cat ./settings.json
+                    echo $settings
                     echo "lol"
                fi
                
-               if [ -z $SETTINGS_JSON ]
+               if [ -z $settings ]
                then
                     echo "::set-output name=schema_hash::$(echo '1' )"
                     echo "::set-output name=package_version::$(echo '1' )"
                else
-                    echo "::set-output name=schema_hash::$(echo $SETTINGS_JSON | jq -r '.schemaHash' )"
-                    echo "::set-output name=package_version::$(echo $SETTINGS_JSON | jq -r '.packageVersion' )"
+                    echo "::set-output name=schema_hash::$(echo $settings | jq -r '.schemaHash' )"
+                    echo "::set-output name=package_version::$(echo  $settings | jq -r '.packageVersion' )"
                fi
                
       - name: Test Variables
