@@ -4,7 +4,7 @@ on:
   push:
     paths: ".github/workflows/update_rebrickable_client.yml"
   schedule:
-    - cron: "0 1 * * SUN"
+    - cron: "0 3 * * *"
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
@@ -137,7 +137,7 @@ jobs:
       needs: [ setup, check, publish ]
       steps:
         - uses: actions/checkout@v2
-        - name: Build
+        - name: Update Settings
           shell: pwsh
           run: |
           
@@ -150,7 +150,7 @@ jobs:
                $settings | ConvertTo-Json | Out-File "./settings.json"
                Get-Content -Path "./settings.json"
                
-        - name: Update Settings
+        - name: Commit Settings
           uses: EndBug/add-and-commit@v9.0.0
           with:
             author_name: "Automation"
