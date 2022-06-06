@@ -94,7 +94,8 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore Rebrickable.Api.csproj
       - name: Build
-        run: dotnet build Rebrickable.Api.csproj -c Release --no-restore
+        run: dotnet pack Rebrickable.Api.csproj -c Release --no-restore
+    
 
 
 
