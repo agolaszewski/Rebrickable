@@ -19,7 +19,10 @@ jobs:
       
       - name: Event
         run: echo '${{ toJSON(github) }}'
-        
+      
+      - name: Update Permissions
+        run: chmod 777 ./settings.json
+      
       - name: Set env vars from settings.json
         id: configuration
         run: | 
