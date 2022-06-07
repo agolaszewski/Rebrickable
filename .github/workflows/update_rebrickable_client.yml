@@ -56,11 +56,11 @@ jobs:
         run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
       
       - name: Set current schema hash
-        run: sha256sum  rebrickable_schema.json | awk '{print $1}'
+        run: cat rebrickable_schema.json | base64 | sha256sum | awk '{print $1}'
       
       - name: Set current schema hash
         id: schema_new
-        run: echo "::set-output name=hash::$(sha256sum  rebrickable_schema.json | awk '{print $1}')"
+        run: echo "::set-output name=hash::$(cat rebrickable_schema.json | base64 | sha256sum | awk '{print $1}')"
       
   generate:
     if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
