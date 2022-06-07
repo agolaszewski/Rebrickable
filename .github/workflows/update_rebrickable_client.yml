@@ -25,7 +25,7 @@ jobs:
         run: | 
                if [[ -f ./settings.json ]]
                then
-                    settings = cat ./settings.json
+                    settings=cat ./settings.json
                     echo $settings
                     echo "lol"
                fi
