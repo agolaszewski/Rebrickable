@@ -29,8 +29,6 @@ jobs:
                if [[ -f ./settings.json ]]
                then
                     settings=$(echo $(cat ./settings.json))
-                    echo $settings
-                    echo "lol"
                fi
                
                if [ -z $settings ]
@@ -63,7 +61,7 @@ jobs:
       
       - name: Test Variables
         run : |
-              echo ${{ needs.check.outputs.schema_new_hash }}
+              echo ${{ steps.schema_new.outputs.schema_new_hash }}
               echo ${{ needs.setup.outputs.schema_hash }}
 
   generate:
