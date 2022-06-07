@@ -59,11 +59,6 @@ jobs:
         id: schema_new
         run: echo "::set-output name=hash::$(sha256sum  rebrickable_schema.json | awk '{print $1}')"
       
-      - name: Test Variables
-        run : |
-              echo ${{ steps.schema_new.outputs.schema_new_hash }}
-              echo ${{ needs.setup.outputs.schema_hash }}
-
   generate:
     if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
     needs: [ setup, check ]
