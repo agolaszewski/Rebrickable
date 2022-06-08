@@ -158,6 +158,7 @@ jobs:
           with:
             author_name: "Automation"
             message: "Update settings.json"
+            pull: '--rebase'
         
   
     
