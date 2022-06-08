@@ -1156,9 +1156,9 @@ namespace RebrickableApi
         /// Get details about a specific Part/Color combination.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task LegoPartsColorsReadAsync(string partNum, string colorId)
+        public System.Threading.Tasks.Task LegoPartsColorsReadAsync(string colorId, string partNum)
         {
-            return LegoPartsColorsReadAsync(partNum, colorId, System.Threading.CancellationToken.None);
+            return LegoPartsColorsReadAsync(colorId, partNum, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1166,18 +1166,18 @@ namespace RebrickableApi
         /// Get details about a specific Part/Color combination.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task LegoPartsColorsReadAsync(string partNum, string colorId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task LegoPartsColorsReadAsync(string colorId, string partNum, System.Threading.CancellationToken cancellationToken)
         {
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
-
             if (colorId == null)
                 throw new System.ArgumentNullException("colorId");
 
+            if (partNum == null)
+                throw new System.ArgumentNullException("partNum");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/colors/{colorId}/");
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -1239,9 +1239,9 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task LegoPartsColorsSetsListAsync(string partNum, string colorId, int? page, int? pageSize, string ordering)
+        public System.Threading.Tasks.Task LegoPartsColorsSetsListAsync(string colorId, string partNum, int? page, int? pageSize, string ordering)
         {
-            return LegoPartsColorsSetsListAsync(partNum, colorId, page, pageSize, ordering, System.Threading.CancellationToken.None);
+            return LegoPartsColorsSetsListAsync(colorId, partNum, page, pageSize, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1252,18 +1252,18 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task LegoPartsColorsSetsListAsync(string partNum, string colorId, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task LegoPartsColorsSetsListAsync(string colorId, string partNum, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
-
             if (colorId == null)
                 throw new System.ArgumentNullException("colorId");
 
+            if (partNum == null)
+                throw new System.ArgumentNullException("partNum");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/colors/{colorId}/sets/?");
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -2495,9 +2495,9 @@ namespace RebrickableApi
         /// Find out how many parts the user needs to build the specified Set.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersBuildReadAsync(string userToken, string setNum)
+        public System.Threading.Tasks.Task UsersBuildReadAsync(string setNum, string userToken)
         {
-            return UsersBuildReadAsync(userToken, setNum, System.Threading.CancellationToken.None);
+            return UsersBuildReadAsync(setNum, userToken, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2505,18 +2505,18 @@ namespace RebrickableApi
         /// Find out how many parts the user needs to build the specified Set.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersBuildReadAsync(string userToken, string setNum, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersBuildReadAsync(string setNum, string userToken, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNum == null)
                 throw new System.ArgumentNullException("setNum");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/build/{setNum}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -2755,9 +2755,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersLostPartsDeleteAsync(string userToken, string id, string ordering)
+        public System.Threading.Tasks.Task UsersLostPartsDeleteAsync(string id, string userToken, string ordering)
         {
-            return UsersLostPartsDeleteAsync(userToken, id, ordering, System.Threading.CancellationToken.None);
+            return UsersLostPartsDeleteAsync(id, userToken, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2766,18 +2766,18 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersLostPartsDeleteAsync(string userToken, string id, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersLostPartsDeleteAsync(string id, string userToken, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/lostParts/{id}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -3121,9 +3121,9 @@ namespace RebrickableApi
         /// Get details about a specific Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsReadAsync(string userToken, string listId)
+        public System.Threading.Tasks.Task UsersPartlistsReadAsync(string listId, string userToken)
         {
-            return UsersPartlistsReadAsync(userToken, listId, System.Threading.CancellationToken.None);
+            return UsersPartlistsReadAsync(listId, userToken, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3131,18 +3131,18 @@ namespace RebrickableApi
         /// Get details about a specific Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsReadAsync(string userToken, string listId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsReadAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -3201,9 +3201,9 @@ namespace RebrickableApi
         /// Replace an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numParts)
+        public System.Threading.Tasks.Task UsersPartlistsUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numParts)
         {
-            return UsersPartlistsUpdateAsync(userToken, listId, isBuildable, name, numParts, System.Threading.CancellationToken.None);
+            return UsersPartlistsUpdateAsync(listId, userToken, isBuildable, name, numParts, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3211,18 +3211,18 @@ namespace RebrickableApi
         /// Replace an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numParts, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numParts, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -3291,9 +3291,9 @@ namespace RebrickableApi
         /// Update an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartialUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numParts)
+        public System.Threading.Tasks.Task UsersPartlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numParts)
         {
-            return UsersPartlistsPartialUpdateAsync(userToken, listId, isBuildable, name, numParts, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartialUpdateAsync(listId, userToken, isBuildable, name, numParts, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3301,18 +3301,18 @@ namespace RebrickableApi
         /// Update an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartialUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numParts, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numParts, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -3379,9 +3379,9 @@ namespace RebrickableApi
         /// Delete a Part List and all it's Parts.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsDeleteAsync(string userToken, string listId)
+        public System.Threading.Tasks.Task UsersPartlistsDeleteAsync(string listId, string userToken)
         {
-            return UsersPartlistsDeleteAsync(userToken, listId, System.Threading.CancellationToken.None);
+            return UsersPartlistsDeleteAsync(listId, userToken, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3389,18 +3389,18 @@ namespace RebrickableApi
         /// Delete a Part List and all it's Parts.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsDeleteAsync(string userToken, string listId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsDeleteAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -3462,9 +3462,9 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartsListAsync(string userToken, string listId, int? page, int? pageSize, string ordering)
+        public System.Threading.Tasks.Task UsersPartlistsPartsListAsync(string listId, string userToken, int? page, int? pageSize, string ordering)
         {
-            return UsersPartlistsPartsListAsync(userToken, listId, page, pageSize, ordering, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartsListAsync(listId, userToken, page, pageSize, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3475,18 +3475,18 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartsListAsync(string userToken, string listId, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartsListAsync(string listId, string userToken, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -3558,9 +3558,9 @@ namespace RebrickableApi
         /// Add one or more Parts to the Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartsCreateAsync(string userToken, string listId, string partNum, int quantity, int colorId)
+        public System.Threading.Tasks.Task UsersPartlistsPartsCreateAsync(string listId, string userToken, string partNum, int quantity, int colorId)
         {
-            return UsersPartlistsPartsCreateAsync(userToken, listId, partNum, quantity, colorId, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartsCreateAsync(listId, userToken, partNum, quantity, colorId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3568,18 +3568,18 @@ namespace RebrickableApi
         /// Add one or more Parts to the Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartsCreateAsync(string userToken, string listId, string partNum, int quantity, int colorId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartsCreateAsync(string listId, string userToken, string partNum, int quantity, int colorId, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -3653,9 +3653,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartsReadAsync(string userToken, string partNum, string listId, string colorId, string ordering)
+        public System.Threading.Tasks.Task UsersPartlistsPartsReadAsync(string colorId, string listId, string partNum, string userToken, string ordering)
         {
-            return UsersPartlistsPartsReadAsync(userToken, partNum, listId, colorId, ordering, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartsReadAsync(colorId, listId, partNum, userToken, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3664,26 +3664,26 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartsReadAsync(string userToken, string partNum, string listId, string colorId, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartsReadAsync(string colorId, string listId, string partNum, string userToken, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (colorId == null)
+                throw new System.ArgumentNullException("colorId");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (partNum == null)
+                throw new System.ArgumentNullException("partNum");
+
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
 
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -3748,9 +3748,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartsUpdateAsync(string userToken, string partNum, string listId, string colorId, int quantity, string ordering)
+        public System.Threading.Tasks.Task UsersPartlistsPartsUpdateAsync(string colorId, string listId, string partNum, string userToken, int quantity, string ordering)
         {
-            return UsersPartlistsPartsUpdateAsync(userToken, partNum, listId, colorId, quantity, ordering, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartsUpdateAsync(colorId, listId, partNum, userToken, quantity, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3759,26 +3759,26 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartsUpdateAsync(string userToken, string partNum, string listId, string colorId, int quantity, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartsUpdateAsync(string colorId, string listId, string partNum, string userToken, int quantity, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (colorId == null)
+                throw new System.ArgumentNullException("colorId");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (partNum == null)
+                throw new System.ArgumentNullException("partNum");
+
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
 
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -3849,9 +3849,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersPartlistsPartsDeleteAsync(string userToken, string partNum, string listId, string colorId, string ordering)
+        public System.Threading.Tasks.Task UsersPartlistsPartsDeleteAsync(string colorId, string listId, string partNum, string userToken, string ordering)
         {
-            return UsersPartlistsPartsDeleteAsync(userToken, partNum, listId, colorId, ordering, System.Threading.CancellationToken.None);
+            return UsersPartlistsPartsDeleteAsync(colorId, listId, partNum, userToken, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3860,26 +3860,26 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersPartlistsPartsDeleteAsync(string userToken, string partNum, string listId, string colorId, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersPartlistsPartsDeleteAsync(string colorId, string listId, string partNum, string userToken, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (colorId == null)
+                throw new System.ArgumentNullException("colorId");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (partNum == null)
+                throw new System.ArgumentNullException("partNum");
+
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
 
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -4307,9 +4307,9 @@ namespace RebrickableApi
         /// Get details about a specific Set List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsReadAsync(string userToken, string listId)
+        public System.Threading.Tasks.Task UsersSetlistsReadAsync(string listId, string userToken)
         {
-            return UsersSetlistsReadAsync(userToken, listId, System.Threading.CancellationToken.None);
+            return UsersSetlistsReadAsync(listId, userToken, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4317,18 +4317,18 @@ namespace RebrickableApi
         /// Get details about a specific Set List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsReadAsync(string userToken, string listId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsReadAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -4387,9 +4387,9 @@ namespace RebrickableApi
         /// Replace an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numSets)
+        public System.Threading.Tasks.Task UsersSetlistsUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numSets)
         {
-            return UsersSetlistsUpdateAsync(userToken, listId, isBuildable, name, numSets, System.Threading.CancellationToken.None);
+            return UsersSetlistsUpdateAsync(listId, userToken, isBuildable, name, numSets, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4397,18 +4397,18 @@ namespace RebrickableApi
         /// Replace an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numSets, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numSets, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -4477,9 +4477,9 @@ namespace RebrickableApi
         /// Update an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsPartialUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numSets)
+        public System.Threading.Tasks.Task UsersSetlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numSets)
         {
-            return UsersSetlistsPartialUpdateAsync(userToken, listId, isBuildable, name, numSets, System.Threading.CancellationToken.None);
+            return UsersSetlistsPartialUpdateAsync(listId, userToken, isBuildable, name, numSets, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4487,18 +4487,18 @@ namespace RebrickableApi
         /// Update an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsPartialUpdateAsync(string userToken, string listId, bool? isBuildable, string name, int? numSets, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable, string name, int? numSets, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -4565,9 +4565,9 @@ namespace RebrickableApi
         /// Delete a Set List and all it's Sets.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsDeleteAsync(string userToken, string listId)
+        public System.Threading.Tasks.Task UsersSetlistsDeleteAsync(string listId, string userToken)
         {
-            return UsersSetlistsDeleteAsync(userToken, listId, System.Threading.CancellationToken.None);
+            return UsersSetlistsDeleteAsync(listId, userToken, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4575,18 +4575,18 @@ namespace RebrickableApi
         /// Delete a Set List and all it's Sets.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsDeleteAsync(string userToken, string listId, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsDeleteAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -4648,9 +4648,9 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsListAsync(string userToken, string listId, int? page, int? pageSize, string ordering)
+        public System.Threading.Tasks.Task UsersSetlistsSetsListAsync(string listId, string userToken, int? page, int? pageSize, string ordering)
         {
-            return UsersSetlistsSetsListAsync(userToken, listId, page, pageSize, ordering, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsListAsync(listId, userToken, page, pageSize, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4661,18 +4661,18 @@ namespace RebrickableApi
         /// <param name="pageSize">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsListAsync(string userToken, string listId, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsListAsync(string listId, string userToken, int? page, int? pageSize, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -4744,9 +4744,9 @@ namespace RebrickableApi
         /// Add one or more Sets to the Set List. Existing Sets are unaffected.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsCreateAsync(string userToken, string listId, string setNum, int? quantity, bool? includeSpares)
+        public System.Threading.Tasks.Task UsersSetlistsSetsCreateAsync(string listId, string userToken, string setNum, int? quantity, bool? includeSpares)
         {
-            return UsersSetlistsSetsCreateAsync(userToken, listId, setNum, quantity, includeSpares, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsCreateAsync(listId, userToken, setNum, quantity, includeSpares, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4754,18 +4754,18 @@ namespace RebrickableApi
         /// Add one or more Sets to the Set List. Existing Sets are unaffected.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsCreateAsync(string userToken, string listId, string setNum, int? quantity, bool? includeSpares, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsCreateAsync(string listId, string userToken, string setNum, int? quantity, bool? includeSpares, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
 
             var client = HttpClient;
             var disposeClient = false;
@@ -4835,9 +4835,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsReadAsync(string userToken, string setNum, string listId, string ordering)
+        public System.Threading.Tasks.Task UsersSetlistsSetsReadAsync(string setNum, string listId, string userToken, string ordering)
         {
-            return UsersSetlistsSetsReadAsync(userToken, setNum, listId, ordering, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsReadAsync(setNum, listId, userToken, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4846,22 +4846,22 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsReadAsync(string userToken, string setNum, string listId, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsReadAsync(string setNum, string listId, string userToken, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNum == null)
                 throw new System.ArgumentNullException("setNum");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -4926,9 +4926,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsUpdateAsync(string userToken, string setNum, string listId, int? quantity, bool? includeSpares, string ordering)
+        public System.Threading.Tasks.Task UsersSetlistsSetsUpdateAsync(string setNum, string listId, string userToken, int? quantity, bool? includeSpares, string ordering)
         {
-            return UsersSetlistsSetsUpdateAsync(userToken, setNum, listId, quantity, includeSpares, ordering, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsUpdateAsync(setNum, listId, userToken, quantity, includeSpares, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -4937,22 +4937,22 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsUpdateAsync(string userToken, string setNum, string listId, int? quantity, bool? includeSpares, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsUpdateAsync(string setNum, string listId, string userToken, int? quantity, bool? includeSpares, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNum == null)
                 throw new System.ArgumentNullException("setNum");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -5023,9 +5023,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsPartialUpdateAsync(string userToken, string setNum, string listId, int? quantity, bool? includeSpares, string ordering)
+        public System.Threading.Tasks.Task UsersSetlistsSetsPartialUpdateAsync(string setNum, string listId, string userToken, int? quantity, bool? includeSpares, string ordering)
         {
-            return UsersSetlistsSetsPartialUpdateAsync(userToken, setNum, listId, quantity, includeSpares, ordering, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsPartialUpdateAsync(setNum, listId, userToken, quantity, includeSpares, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -5034,22 +5034,22 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsPartialUpdateAsync(string userToken, string setNum, string listId, int? quantity, bool? includeSpares, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsPartialUpdateAsync(string setNum, string listId, string userToken, int? quantity, bool? includeSpares, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNum == null)
                 throw new System.ArgumentNullException("setNum");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -5120,9 +5120,9 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetlistsSetsDeleteAsync(string userToken, string setNum, string listId, string ordering)
+        public System.Threading.Tasks.Task UsersSetlistsSetsDeleteAsync(string setNum, string listId, string userToken, string ordering)
         {
-            return UsersSetlistsSetsDeleteAsync(userToken, setNum, listId, ordering, System.Threading.CancellationToken.None);
+            return UsersSetlistsSetsDeleteAsync(setNum, listId, userToken, ordering, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -5131,22 +5131,22 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetlistsSetsDeleteAsync(string userToken, string setNum, string listId, string ordering, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetlistsSetsDeleteAsync(string setNum, string listId, string userToken, string ordering, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNum == null)
                 throw new System.ArgumentNullException("setNum");
 
             if (listId == null)
                 throw new System.ArgumentNullException("listId");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -5509,9 +5509,9 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetsReadAsync(string userToken, string setNumPath, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
+        public System.Threading.Tasks.Task UsersSetsReadAsync(string setNumPath, string userToken, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
         {
-            return UsersSetsReadAsync(userToken, setNumPath, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
+            return UsersSetsReadAsync(setNumPath, userToken, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -5521,18 +5521,18 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetsReadAsync(string userToken, string setNumPath, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetsReadAsync(string setNumPath, string userToken, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNumPath == null)
                 throw new System.ArgumentNullException("setNumPath");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (setNumQuery != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -5626,9 +5626,9 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetsUpdateAsync(string userToken, string setNumPath, int? quantity, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
+        public System.Threading.Tasks.Task UsersSetsUpdateAsync(string setNumPath, string userToken, int? quantity, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
         {
-            return UsersSetsUpdateAsync(userToken, setNumPath, quantity, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
+            return UsersSetsUpdateAsync(setNumPath, userToken, quantity, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -5638,18 +5638,18 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetsUpdateAsync(string userToken, string setNumPath, int? quantity, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetsUpdateAsync(string setNumPath, string userToken, int? quantity, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNumPath == null)
                 throw new System.ArgumentNullException("setNumPath");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (setNumQuery != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
@@ -5747,9 +5747,9 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task UsersSetsDeleteAsync(string userToken, string setNumPath, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
+        public System.Threading.Tasks.Task UsersSetsDeleteAsync(string setNumPath, string userToken, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search)
         {
-            return UsersSetsDeleteAsync(userToken, setNumPath, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
+            return UsersSetsDeleteAsync(setNumPath, userToken, setNumQuery, themeId, minYear, maxYear, minParts, maxParts, ordering, search, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -5759,18 +5759,18 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task UsersSetsDeleteAsync(string userToken, string setNumPath, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task UsersSetsDeleteAsync(string setNumPath, string userToken, string setNumQuery, double? themeId, double? minYear, double? maxYear, double? minParts, double? maxParts, string ordering, string search, System.Threading.CancellationToken cancellationToken)
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
             if (setNumPath == null)
                 throw new System.ArgumentNullException("setNumPath");
 
+            if (userToken == null)
+                throw new System.ArgumentNullException("userToken");
+
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
             if (setNumQuery != null)
             {
                 urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
