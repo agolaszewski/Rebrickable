@@ -140,6 +140,7 @@ jobs:
       needs: [ setup, check, publish ]
       steps:
         - uses: actions/checkout@v2
+        - run: git checkout HEAD^
         - name: Update Settings
           shell: pwsh
           run: |
