@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32319.34
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebrickable.Generator", "Rebrickable.Generator\Rebrickable.Generator.csproj", "{C3C832F9-CAEE-49BD-972E-D05F98D69DC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebrickable.Generator", "Rebrickable.Generator\Rebrickable.Generator.csproj", "{C3C832F9-CAEE-49BD-972E-D05F98D69DC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebrickable.Api", "Rebrickable.Api\Rebrickable.Api.csproj", "{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebrickable.Api", "Rebrickable.Api\Rebrickable.Api.csproj", "{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
