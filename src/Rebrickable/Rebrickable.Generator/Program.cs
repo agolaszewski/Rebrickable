@@ -25,27 +25,39 @@ var generatedClientFile = clientGenerator.GenerateFile();
 generatedClientFile = generatedClientFile.Replace(" virtual ", " ");
 generatedClientFile = generatedClientFile.Replace("protected ", "private ");
 
+generatedClientFile = generatedClientFile.Replace("public async System.Threading.Tasks.Task ", "public async System.Threading.Tasks.Task<string> ");
+generatedClientFile = generatedClientFile.Replace("public System.Threading.Tasks.Task ", "public System.Threading.Tasks.Task<string> ");
+generatedClientFile = generatedClientFile.Replace("return;", "return await response_.Content.ReadAsStringAsync();");
+generatedClientFile = generatedClientFile.Replace("using System = global::System;", "using System = global::System; using Newtonsoft.Json;");
+
 var charList = generatedClientFile.ToList();
+var opening = false;
+
 for (int index = 0; index < charList.Count;)
 {
-    if (charList[index] == '_')
+    if (charList[index] == 'g' && charList[index + 1] == '>' && charList[index + 2] == ' ')
+    {
+        opening = true;
+    }
+
+    if (opening && charList[index] == '_')
     {
         charList[index + 1] = char.ToUpper(charList[index + 1]);
         charList.RemoveAt(index);
+    }
+
+    if (charList[index] == '(')
+    {
+        opening = false;
     }
 
     index++;
 }
 
 generatedClientFile = string.Join("", charList);
-generatedClientFile = generatedClientFile.Replace("private string BaseUrl", "private string _baseUrl");
-generatedClientFile = generatedClientFile.Replace("get { return BaseUrl; }", "get { return _baseUrl; }");
-generatedClientFile = generatedClientFile.Replace("set { BaseUrl = value; }", "set { _baseUrl = value; }");
-
-generatedClientFile = generatedClientFile.Replace("public async System.Threading.Tasks.Task ", "public async System.Threading.Tasks.Task<string> ");
-generatedClientFile = generatedClientFile.Replace("public System.Threading.Tasks.Task ", "public System.Threading.Tasks.Task<string> ");
-generatedClientFile = generatedClientFile.Replace("return;", "return await response.Content.ReadAsStringAsync();");
-generatedClientFile = generatedClientFile.Replace("using System = global::System;", "using System = global::System; using Newtonsoft.Json;");
+//generatedClientFile = generatedClientFile.Replace("private string BaseUrl", "private string _baseUrl");
+//generatedClientFile = generatedClientFile.Replace("get { return BaseUrl; }", "get { return _baseUrl; }");
+//generatedClientFile = generatedClientFile.Replace("set { BaseUrl = value; }", "set { _baseUrl = value; }");
 
 generatedClientFile = generatedClientFile
     .Replace(
@@ -54,7 +66,7 @@ generatedClientFile = generatedClientFile
 
 var legoSetsListAsyncIndex = generatedClientFile.LastIndexOf("LegoSetsListAsync");
 var search = generatedClientFile.Substring(legoSetsListAsyncIndex);
-var rest = ReplaceFirst(search, "return await response.Content.ReadAsStringAsync();", "return JsonConvert.DeserializeObject<LegoSetsListAsyncResponse>(await response.Content.ReadAsStringAsync());");
+var rest = ReplaceFirst(search, "return await response_.Content.ReadAsStringAsync();", "return JsonConvert.DeserializeObject<LegoSetsListAsyncResponse>(await response_.Content.ReadAsStringAsync());");
 generatedClientFile = generatedClientFile.Substring(0, legoSetsListAsyncIndex) + rest;
 
 string ReplaceFirst(string text, string search, string replace)
@@ -66,8 +78,6 @@ string ReplaceFirst(string text, string search, string replace)
     }
     return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
 }
-
-
 
 //var lastClosingBracket = generatedClientFile.LastIndexOf('}');
 //generatedClientFile = generatedClientFile.Substring(0, lastClosingBracket) + "{responses} } " + generatedClientFile.Substring(lastClosingBracket);
