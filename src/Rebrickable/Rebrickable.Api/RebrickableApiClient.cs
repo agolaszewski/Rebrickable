@@ -21,13 +21,13 @@ namespace RebrickableApi
     public sealed  partial class RebrickableClient 
     {
         private string _baseUrl = "https://rebrickable.com";
-        private System.Net.Http.HttpClient HttpClient;
-        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> Settings;
+        private System.Net.Http.HttpClient _httpClient;
+        private System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings;
 
         public RebrickableClient(System.Net.Http.HttpClient httpClient)
         {
-            HttpClient = httpClient;
-            Settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
+            _httpClient = httpClient;
+            _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings);
         }
 
         private Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
@@ -43,7 +43,7 @@ namespace RebrickableApi
             set { _baseUrl = value; }
         }
 
-        private Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return Settings.Value; } }
+        private Newtonsoft.Json.JsonSerializerSettings JsonSerializerSettings { get { return _settings.Value; } }
 
         partial void UpdateJsonSerializerSettings(Newtonsoft.Json.JsonSerializerSettings settings);
 
@@ -56,77 +56,77 @@ namespace RebrickableApi
         /// Get a list of all Colors.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoColorsListAsync(int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoColorsListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/colors/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/colors/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -142,65 +142,65 @@ namespace RebrickableApi
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/colors/{id}/?");
-            urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/colors/{id}/?");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -209,65 +209,65 @@ namespace RebrickableApi
         /// Get details about a specific Element ID.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoElementsReadAsync(string elementId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoElementsReadAsync(string element_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (elementId == null)
-                throw new System.ArgumentNullException("elementId");
+            if (element_id == null)
+                throw new System.ArgumentNullException("element_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/elements/{elementId}/");
-            urlBuilder.Replace("{elementId}", System.Uri.EscapeDataString(ConvertToString(elementId, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/elements/{element_id}/");
+            urlBuilder_.Replace("{element_id}", System.Uri.EscapeDataString(ConvertToString(element_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -276,98 +276,98 @@ namespace RebrickableApi
         /// Get a list of Minifigs.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoMinifigsListAsync(int? page = null, int? pageSize = null, double? minParts = null, double? maxParts = null, string inSetNum = null, string inThemeId = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoMinifigsListAsync(int? page = null, int? page_size = null, double? min_parts = null, double? max_parts = null, string in_set_num = null, string in_theme_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (inSetNum != null)
+            if (in_set_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("inSetNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(inSetNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("in_set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(in_set_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (inThemeId != null)
+            if (in_theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("inThemeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(inThemeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("in_theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(in_theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -376,65 +376,65 @@ namespace RebrickableApi
         /// Get details for a specific Minifig.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoMinifigsReadAsync(string setNum, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoMinifigsReadAsync(string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{setNum}/");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{set_num}/");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -443,76 +443,76 @@ namespace RebrickableApi
         /// Get a list of all Inventory Parts in this Minifig.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoMinifigsPartsListAsync(string setNum, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoMinifigsPartsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{setNum}/parts/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{set_num}/parts/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -521,81 +521,81 @@ namespace RebrickableApi
         /// Get a list of Sets a Minifig has appeared in.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoMinifigsSetsListAsync(string setNum, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{setNum}/sets/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/minifigs/{set_num}/sets/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -604,77 +604,77 @@ namespace RebrickableApi
         /// Get a list of all Part Categories.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartCategoriesListAsync(int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartCategoriesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/partCategories/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/part_categories/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -690,65 +690,65 @@ namespace RebrickableApi
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/partCategories/{id}/?");
-            urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/part_categories/{id}/?");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -757,114 +757,114 @@ namespace RebrickableApi
         /// Get a list of Parts.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartsListAsync(int? page = null, int? pageSize = null, string partNum = null, string partNums = null, string partCatId = null, string colorId = null, string bricklinkId = null, string brickowlId = null, string legoId = null, string ldrawId = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartsListAsync(int? page = null, int? page_size = null, string part_num = null, string part_nums = null, string part_cat_id = null, string color_id = null, string bricklink_id = null, string brickowl_id = null, string lego_id = null, string ldraw_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partNum != null)
+            if (part_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partNums != null)
+            if (part_nums != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partNums") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partNums, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_nums") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_nums, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partCatId != null)
+            if (part_cat_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partCatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partCatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_cat_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_cat_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (colorId != null)
+            if (color_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("colorId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("color_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (bricklinkId != null)
+            if (bricklink_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("bricklinkId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(bricklinkId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("bricklink_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(bricklink_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (brickowlId != null)
+            if (brickowl_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("brickowlId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(brickowlId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("brickowl_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(brickowl_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (legoId != null)
+            if (lego_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("legoId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(legoId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("lego_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(lego_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (ldrawId != null)
+            if (ldraw_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ldrawId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ldrawId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ldraw_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ldraw_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -873,65 +873,65 @@ namespace RebrickableApi
         /// Get details about a specific Part.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartsReadAsync(string partNum, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartsReadAsync(string part_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/");
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{part_num}/");
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -940,81 +940,81 @@ namespace RebrickableApi
         /// Get a list of all Colors a Part has appeared in.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartsColorsListAsync(string partNum, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartsColorsListAsync(string part_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/colors/?");
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{part_num}/colors/?");
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1023,69 +1023,69 @@ namespace RebrickableApi
         /// Get details about a specific Part/Color combination.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartsColorsReadAsync(string colorId, string partNum, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartsColorsReadAsync(string part_num, string color_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (color_id == null)
+                throw new System.ArgumentNullException("color_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/colors/{colorId}/");
-            urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{part_num}/colors/{color_id}/");
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{color_id}", System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1094,85 +1094,85 @@ namespace RebrickableApi
         /// Get a list of all Sets the Part/Color combination has appeard in.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoPartsColorsSetsListAsync(string colorId, string partNum, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoPartsColorsSetsListAsync(string part_num, string color_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (color_id == null)
+                throw new System.ArgumentNullException("color_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{partNum}/colors/{colorId}/sets/?");
-            urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/parts/{part_num}/colors/{color_id}/sets/?");
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{color_id}", System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1181,102 +1181,102 @@ namespace RebrickableApi
         /// Get a list of Sets, optionally filtered by any of the below parameters.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<LegoSetsListAsyncResponse> LegoSetsListAsync(int? page = null, int? pageSize = null, string themeId = null, double? minYear = null, double? maxYear = null, double? minParts = null, double? maxParts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<LegoSetsListAsyncResponse> LegoSetsListAsync(int? page = null, int? page_size = null, string theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (themeId != null)
+            if (theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("themeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(themeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minYear != null)
+            if (min_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxYear != null)
+            if (max_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return JsonConvert.DeserializeObject<LegoSetsListAsyncResponse>(await response.Content.ReadAsStringAsync());
+                            return JsonConvert.DeserializeObject<LegoSetsListAsyncResponse>(await response_.Content.ReadAsStringAsync());
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1285,65 +1285,65 @@ namespace RebrickableApi
         /// Get details for a specific Set.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsReadAsync(string setNum, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoSetsReadAsync(string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{setNum}/");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{set_num}/");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1352,81 +1352,81 @@ namespace RebrickableApi
         /// Get a list of MOCs which are Alternate Builds of a specific Set - i.e. all parts in the MOC can
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsAlternatesListAsync(string setNum, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoSetsAlternatesListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{setNum}/alternates/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{set_num}/alternates/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1435,76 +1435,76 @@ namespace RebrickableApi
         /// Get a list of all Inventory Minifigs in this Set.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsMinifigsListAsync(string setNum, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{setNum}/minifigs/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{set_num}/minifigs/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1513,76 +1513,76 @@ namespace RebrickableApi
         /// Get a list of all Inventory Parts in this Set.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsPartsListAsync(string setNum, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoSetsPartsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{setNum}/parts/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{set_num}/parts/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1591,76 +1591,76 @@ namespace RebrickableApi
         /// Get a list of all Inventory Sets in this Set.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsSetsListAsync(string setNum, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoSetsSetsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{setNum}/sets/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/sets/{set_num}/sets/?");
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1669,77 +1669,77 @@ namespace RebrickableApi
         /// Return all Themes
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoThemesListAsync(int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> LegoThemesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/themes/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/themes/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1755,65 +1755,65 @@ namespace RebrickableApi
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/themes/{id}/?");
-            urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/lego/themes/{id}/?");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1821,59 +1821,59 @@ namespace RebrickableApi
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
         public async System.Threading.Tasks.Task<string> SwaggerListAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/swagger/");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/swagger/");
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1886,69 +1886,69 @@ namespace RebrickableApi
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
         public async System.Threading.Tasks.Task<string> Users_tokenCreateAsync(string username, string password, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/Token/");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/_token/");
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (username == null)
                         throw new System.ArgumentNullException("username");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("username", ConvertToString(username, System.Globalization.CultureInfo.InvariantCulture)));
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("username", ConvertToString(username, System.Globalization.CultureInfo.InvariantCulture)));
                     if (password == null)
                         throw new System.ArgumentNullException("password");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("password", ConvertToString(password, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("password", ConvertToString(password, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -1957,77 +1957,77 @@ namespace RebrickableApi
         /// Get a list of all the available Badges
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersBadgesListAsync(int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersBadgesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/badges/?");
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/badges/?");
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2043,65 +2043,65 @@ namespace RebrickableApi
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/badges/{id}/?");
-            urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/badges/{id}/?");
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2110,88 +2110,88 @@ namespace RebrickableApi
         /// Get a list of all the Parts in all the user's Part Lists as well as the Parts inside Sets in the user's Set Lists.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersAllpartsListAsync(string userToken, int? page = null, int? pageSize = null, string partNum = null, double? partCatId = null, double? colorId = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersAllpartsListAsync(string user_token, int? page = null, int? page_size = null, string part_num = null, double? part_cat_id = null, double? color_id = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/allparts/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/allparts/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partNum != null)
+            if (part_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partCatId != null)
+            if (part_cat_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partCatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partCatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_cat_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_cat_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (colorId != null)
+            if (color_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("colorId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("color_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2200,69 +2200,69 @@ namespace RebrickableApi
         /// Find out how many parts the user needs to build the specified Set.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersBuildReadAsync(string setNum, string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersBuildReadAsync(string user_token, string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/build/{setNum}/");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/build/{set_num}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2271,81 +2271,81 @@ namespace RebrickableApi
         /// Get a list of all the Lost Parts from the user's LEGO collection.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersLostPartsListAsync(string userToken, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersLostPartsListAsync(string user_token, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/lostParts/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/lost_parts/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2354,73 +2354,73 @@ namespace RebrickableApi
         /// Add one or more Lost Parts to the user.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersLostPartsCreateAsync(string userToken, int invPartId, int? lostQuantity = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersLostPartsCreateAsync(string user_token, int inv_part_id, int? lost_quantity = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/lostParts/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/lost_parts/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (invPartId == null)
-                        throw new System.ArgumentNullException("invPartId");
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (inv_part_id == null)
+                        throw new System.ArgumentNullException("inv_part_id");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("invPartId", ConvertToString(invPartId, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (lostQuantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("lostQuantity", ConvertToString(lostQuantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("inv_part_id", ConvertToString(inv_part_id, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (lost_quantity != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("lost_quantity", ConvertToString(lost_quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2430,74 +2430,74 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersLostPartsDeleteAsync(string id, string userToken, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersLostPartsDeleteAsync(string user_token, string id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
+
             if (id == null)
                 throw new System.ArgumentNullException("id");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
-
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/lostParts/{id}/?");
-            urlBuilder.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/lost_parts/{id}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2506,90 +2506,90 @@ namespace RebrickableApi
         /// Get a list of all the Minifigs in all the user's Sets. Note that this is a read-only list as Minifigs are
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersMinifigsListAsync(string userToken, int? page = null, int? pageSize = null, string figSetNum = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersMinifigsListAsync(string user_token, int? page = null, int? page_size = null, string fig_set_num = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/minifigs/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/minifigs/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (figSetNum != null)
+            if (fig_set_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("figSetNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(figSetNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("fig_set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(fig_set_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2598,76 +2598,76 @@ namespace RebrickableApi
         /// Get a list of all the user's Part Lists.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsListAsync(string userToken, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsListAsync(string user_token, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2676,75 +2676,75 @@ namespace RebrickableApi
         /// Add a new Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsCreateAsync(string userToken, string name, bool? isBuildable = null, int? numParts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsCreateAsync(string user_token, string name, bool? is_buildable = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (name == null)
                         throw new System.ArgumentNullException("name");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numParts != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numParts", ConvertToString(numParts, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_parts != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_parts", ConvertToString(num_parts, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2753,69 +2753,69 @@ namespace RebrickableApi
         /// Get details about a specific Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsReadAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsReadAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2824,79 +2824,79 @@ namespace RebrickableApi
         /// Replace an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsUpdateAsync(string listId, string userToken, string name, bool? isBuildable = null, int? numParts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsUpdateAsync(string user_token, string list_id, string name, bool? is_buildable = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (name == null)
                         throw new System.ArgumentNullException("name");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numParts != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numParts", ConvertToString(numParts, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PUT");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_parts != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_parts", ConvertToString(num_parts, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2905,77 +2905,77 @@ namespace RebrickableApi
         /// Update an existing Part List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable = null, string name = null, int? numParts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartialUpdateAsync(string user_token, string list_id, bool? is_buildable = null, string name = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
                     if (name != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numParts != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numParts", ConvertToString(numParts, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PATCH");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_parts != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_parts", ConvertToString(num_parts, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PATCH");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -2984,69 +2984,69 @@ namespace RebrickableApi
         /// Delete a Part List and all it's Parts.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsDeleteAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsDeleteAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3055,85 +3055,85 @@ namespace RebrickableApi
         /// Get a list of all the Parts in a specific Part List.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsListAsync(string listId, string userToken, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsListAsync(string user_token, string list_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/?");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/parts/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3142,83 +3142,83 @@ namespace RebrickableApi
         /// Add one or more Parts to the Part List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsCreateAsync(string listId, string userToken, string partNum, int quantity, int colorId, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsCreateAsync(string user_token, string list_id, string part_num, int quantity, int color_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/parts/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (partNum == null)
-                        throw new System.ArgumentNullException("partNum");
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (part_num == null)
+                        throw new System.ArgumentNullException("part_num");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("partNum", ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("part_num", ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
                     if (quantity == null)
                         throw new System.ArgumentNullException("quantity");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (colorId == null)
-                        throw new System.ArgumentNullException("colorId");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (color_id == null)
+                        throw new System.ArgumentNullException("color_id");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("colorId", ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("color_id", ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3228,82 +3228,82 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsReadAsync(string colorId, string listId, string partNum, string userToken, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsReadAsync(string user_token, string part_num, string list_id, string color_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (color_id == null)
+                throw new System.ArgumentNullException("color_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/parts/{part_num}/{color_id}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{color_id}", System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3313,88 +3313,88 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsUpdateAsync(string colorId, string listId, string partNum, string userToken, int quantity, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsUpdateAsync(string user_token, string part_num, string list_id, string color_id, int quantity, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (color_id == null)
+                throw new System.ArgumentNullException("color_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/parts/{part_num}/{color_id}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{color_id}", System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (quantity == null)
                         throw new System.ArgumentNullException("quantity");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PUT");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3404,82 +3404,82 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsDeleteAsync(string colorId, string listId, string partNum, string userToken, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartlistsPartsDeleteAsync(string user_token, string part_num, string list_id, string color_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (colorId == null)
-                throw new System.ArgumentNullException("colorId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (part_num == null)
+                throw new System.ArgumentNullException("part_num");
 
-            if (partNum == null)
-                throw new System.ArgumentNullException("partNum");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (color_id == null)
+                throw new System.ArgumentNullException("color_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/partlists/{listId}/parts/{partNum}/{colorId}/?");
-            urlBuilder.Replace("{colorId}", System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{partNum}", System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/partlists/{list_id}/parts/{part_num}/{color_id}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{part_num}", System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{color_id}", System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3488,98 +3488,98 @@ namespace RebrickableApi
         /// Get a list of all the Parts in all the user's Part Lists.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersPartsListAsync(string userToken, int? page = null, int? pageSize = null, string partNum = null, double? partCatId = null, double? colorId = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersPartsListAsync(string user_token, int? page = null, int? page_size = null, string part_num = null, double? part_cat_id = null, double? color_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/parts/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/parts/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partNum != null)
+            if (part_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (partCatId != null)
+            if (part_cat_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("partCatId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(partCatId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("part_cat_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(part_cat_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (colorId != null)
+            if (color_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("colorId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(colorId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("color_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(color_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3588,65 +3588,65 @@ namespace RebrickableApi
         /// Get details about a specific user.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersProfileReadAsync(string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersProfileReadAsync(string user_token, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/profile/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/profile/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3655,76 +3655,76 @@ namespace RebrickableApi
         /// Get a list of all the user's Set Lists.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsListAsync(string userToken, int? page = null, int? pageSize = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsListAsync(string user_token, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3733,75 +3733,75 @@ namespace RebrickableApi
         /// Add a new Set List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsCreateAsync(string userToken, string name, bool? isBuildable = null, int? numSets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsCreateAsync(string user_token, string name, bool? is_buildable = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (name == null)
                         throw new System.ArgumentNullException("name");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numSets != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numSets", ConvertToString(numSets, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_sets != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_sets", ConvertToString(num_sets, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3810,69 +3810,69 @@ namespace RebrickableApi
         /// Get details about a specific Set List.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsReadAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsReadAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3881,79 +3881,79 @@ namespace RebrickableApi
         /// Replace an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsUpdateAsync(string listId, string userToken, string name, bool? isBuildable = null, int? numSets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsUpdateAsync(string user_token, string list_id, string name, bool? is_buildable = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (name == null)
                         throw new System.ArgumentNullException("name");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numSets != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numSets", ConvertToString(numSets, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PUT");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_sets != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_sets", ConvertToString(num_sets, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -3962,77 +3962,77 @@ namespace RebrickableApi
         /// Update an existing Set List's details.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsPartialUpdateAsync(string listId, string userToken, bool? isBuildable = null, string name = null, int? numSets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsPartialUpdateAsync(string user_token, string list_id, bool? is_buildable = null, string name = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (isBuildable != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("isBuildable", ConvertToString(isBuildable, System.Globalization.CultureInfo.InvariantCulture)));
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (is_buildable != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("is_buildable", ConvertToString(is_buildable, System.Globalization.CultureInfo.InvariantCulture)));
                     if (name != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (numSets != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("numSets", ConvertToString(numSets, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PATCH");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("name", ConvertToString(name, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (num_sets != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("num_sets", ConvertToString(num_sets, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PATCH");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4041,69 +4041,69 @@ namespace RebrickableApi
         /// Delete a Set List and all it's Sets.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsDeleteAsync(string listId, string userToken, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsDeleteAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4112,85 +4112,85 @@ namespace RebrickableApi
         /// Get a list of all the Sets in a specific Set List.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsListAsync(string listId, string userToken, int? page = null, int? pageSize = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsListAsync(string user_token, string list_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/?");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4199,79 +4199,79 @@ namespace RebrickableApi
         /// Add one or more Sets to the Set List. Existing Sets are unaffected.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsCreateAsync(string listId, string userToken, string setNum, int? quantity = null, bool? includeSpares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsCreateAsync(string user_token, string list_id, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/");
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (setNum == null)
-                        throw new System.ArgumentNullException("setNum");
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (set_num == null)
+                        throw new System.ArgumentNullException("set_num");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("setNum", ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("set_num", ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (includeSpares != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("includeSpares", ConvertToString(includeSpares, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (include_spares != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("include_spares", ConvertToString(include_spares, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4281,78 +4281,78 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsReadAsync(string setNum, string listId, string userToken, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsReadAsync(string user_token, string set_num, string list_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4362,84 +4362,84 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsUpdateAsync(string setNum, string listId, string userToken, int? quantity = null, bool? includeSpares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsUpdateAsync(string user_token, string set_num, string list_id, int? quantity = null, bool? include_spares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (includeSpares != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("includeSpares", ConvertToString(includeSpares, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PUT");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (include_spares != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("include_spares", ConvertToString(include_spares, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4449,84 +4449,84 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsPartialUpdateAsync(string setNum, string listId, string userToken, int? quantity = null, bool? includeSpares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsPartialUpdateAsync(string user_token, string set_num, string list_id, int? quantity = null, bool? include_spares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (includeSpares != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("includeSpares", ConvertToString(includeSpares, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PATCH");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (include_spares != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("include_spares", ConvertToString(include_spares, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PATCH");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4536,78 +4536,78 @@ namespace RebrickableApi
         /// </summary>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsDeleteAsync(string setNum, string listId, string userToken, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetlistsSetsDeleteAsync(string user_token, string set_num, string list_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNum == null)
-                throw new System.ArgumentNullException("setNum");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (listId == null)
-                throw new System.ArgumentNullException("listId");
+            if (set_num == null)
+                throw new System.ArgumentNullException("set_num");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (list_id == null)
+                throw new System.ArgumentNullException("list_id");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/setlists/{listId}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{listId}", System.Uri.EscapeDataString(ConvertToString(listId, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/setlists/{list_id}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{list_id}", System.Uri.EscapeDataString(ConvertToString(list_id, System.Globalization.CultureInfo.InvariantCulture)));
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4616,110 +4616,110 @@ namespace RebrickableApi
         /// Get a list of all the Sets in the user's LEGO collection.
         /// </summary>
         /// <param name="page">A page number within the paginated result set.</param>
-        /// <param name="pageSize">Number of results to return per page.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsListAsync(string userToken, int? page = null, int? pageSize = null, string setNum = null, double? themeId = null, double? minYear = null, double? maxYear = null, double? minParts = null, double? maxParts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsListAsync(string user_token, int? page = null, int? page_size = null, string set_num = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/?");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
             if (page != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (pageSize != null)
+            if (page_size != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("pageSize") + "=").Append(System.Uri.EscapeDataString(ConvertToString(pageSize, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("page_size") + "=").Append(System.Uri.EscapeDataString(ConvertToString(page_size, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (setNum != null)
+            if (set_num != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (themeId != null)
+            if (theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("themeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(themeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minYear != null)
+            if (min_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxYear != null)
+            if (max_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4728,75 +4728,75 @@ namespace RebrickableApi
         /// Add one or more Sets to the user's LEGO collection. Existing Sets are unaffected.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsCreateAsync(string userToken, string setNum, int? quantity = null, bool? includeSpares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsCreateAsync(string user_token, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (setNum == null)
-                        throw new System.ArgumentNullException("setNum");
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (set_num == null)
+                        throw new System.ArgumentNullException("set_num");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("setNum", ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("set_num", ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (includeSpares != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("includeSpares", ConvertToString(includeSpares, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (include_spares != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("include_spares", ConvertToString(include_spares, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4805,75 +4805,75 @@ namespace RebrickableApi
         /// Synchronise a user's Sets to the POSTed list.
         /// </summary>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsSyncCreateAsync(string userToken, string setNum, int? quantity = null, bool? includeSpares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsSyncCreateAsync(string user_token, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/sync/");
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/sync/");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
-                    if (setNum == null)
-                        throw new System.ArgumentNullException("setNum");
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    if (set_num == null)
+                        throw new System.ArgumentNullException("set_num");
                     else
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("setNum", ConvertToString(setNum, System.Globalization.CultureInfo.InvariantCulture)));
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("set_num", ConvertToString(set_num, System.Globalization.CultureInfo.InvariantCulture)));
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    if (includeSpares != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("includeSpares", ConvertToString(includeSpares, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("POST");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    if (include_spares != null)
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("include_spares", ConvertToString(include_spares, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 201)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 201)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4884,102 +4884,102 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsReadAsync(string setNumPath, string userToken, string setNumQuery = null, double? themeId = null, double? minYear = null, double? maxYear = null, double? minParts = null, double? maxParts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsReadAsync(string user_token, string set_numPath, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNumPath == null)
-                throw new System.ArgumentNullException("setNumPath");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (set_numPath == null)
+                throw new System.ArgumentNullException("set_numPath");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            if (setNumQuery != null)
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_numPath, System.Globalization.CultureInfo.InvariantCulture)));
+            if (set_numQuery != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(set_numQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (themeId != null)
+            if (theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("themeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(themeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minYear != null)
+            if (min_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxYear != null)
+            if (max_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -4990,106 +4990,106 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsUpdateAsync(string setNumPath, string userToken, int? quantity = null, string setNumQuery = null, double? themeId = null, double? minYear = null, double? maxYear = null, double? minParts = null, double? maxParts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsUpdateAsync(string user_token, string set_numPath, int? quantity = null, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNumPath == null)
-                throw new System.ArgumentNullException("setNumPath");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (set_numPath == null)
+                throw new System.ArgumentNullException("set_numPath");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            if (setNumQuery != null)
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_numPath, System.Globalization.CultureInfo.InvariantCulture)));
+            if (set_numQuery != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(set_numQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (themeId != null)
+            if (theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("themeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(themeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minYear != null)
+            if (min_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxYear != null)
+            if (max_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    var keyValues = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
+                    var keyValues_ = new System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<string, string>>();
                     if (quantity != null)
-                        keyValues.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
-                    request.Content = new System.Net.Http.FormUrlEncodedContent(keyValues);
-                    request.Method = new System.Net.Http.HttpMethod("PUT");
+                        keyValues_.Add(new System.Collections.Generic.KeyValuePair<string, string>("quantity", ConvertToString(quantity, System.Globalization.CultureInfo.InvariantCulture)));
+                    request_.Content = new System.Net.Http.FormUrlEncodedContent(keyValues_);
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 200)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
@@ -5100,102 +5100,102 @@ namespace RebrickableApi
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <param name="search">A search term.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> UsersSetsDeleteAsync(string setNumPath, string userToken, string setNumQuery = null, double? themeId = null, double? minYear = null, double? maxYear = null, double? minParts = null, double? maxParts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<string> UsersSetsDeleteAsync(string user_token, string set_numPath, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (setNumPath == null)
-                throw new System.ArgumentNullException("setNumPath");
+            if (user_token == null)
+                throw new System.ArgumentNullException("user_token");
 
-            if (userToken == null)
-                throw new System.ArgumentNullException("userToken");
+            if (set_numPath == null)
+                throw new System.ArgumentNullException("set_numPath");
 
-            var urlBuilder = new System.Text.StringBuilder();
-            urlBuilder.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{userToken}/sets/{setNum}/?");
-            urlBuilder.Replace("{setNum}", System.Uri.EscapeDataString(ConvertToString(setNumPath, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder.Replace("{userToken}", System.Uri.EscapeDataString(ConvertToString(userToken, System.Globalization.CultureInfo.InvariantCulture)));
-            if (setNumQuery != null)
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v3/users/{user_token}/sets/{set_num}/?");
+            urlBuilder_.Replace("{user_token}", System.Uri.EscapeDataString(ConvertToString(user_token, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Replace("{set_num}", System.Uri.EscapeDataString(ConvertToString(set_numPath, System.Globalization.CultureInfo.InvariantCulture)));
+            if (set_numQuery != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("setNum") + "=").Append(System.Uri.EscapeDataString(ConvertToString(setNumQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("set_num") + "=").Append(System.Uri.EscapeDataString(ConvertToString(set_numQuery, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (themeId != null)
+            if (theme_id != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("themeId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(themeId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("theme_id") + "=").Append(System.Uri.EscapeDataString(ConvertToString(theme_id, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minYear != null)
+            if (min_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxYear != null)
+            if (max_year != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxYear") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxYear, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_year") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_year, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (minParts != null)
+            if (min_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("minParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(minParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("min_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(min_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            if (maxParts != null)
+            if (max_parts != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("maxParts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(maxParts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("max_parts") + "=").Append(System.Uri.EscapeDataString(ConvertToString(max_parts, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (ordering != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("ordering") + "=").Append(System.Uri.EscapeDataString(ConvertToString(ordering, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
             if (search != null)
             {
-                urlBuilder.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+                urlBuilder_.Append(System.Uri.EscapeDataString("search") + "=").Append(System.Uri.EscapeDataString(ConvertToString(search, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
             }
-            urlBuilder.Length--;
+            urlBuilder_.Length--;
 
-            var client = HttpClient;
-            var disposeClient = false;
+            var client_ = _httpClient;
+            var disposeClient_ = false;
             try
             {
-                using (var request = new System.Net.Http.HttpRequestMessage())
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
 
-                    PrepareRequest(client, request, urlBuilder);
+                    PrepareRequest(client_, request_, urlBuilder_);
 
-                    var url = urlBuilder.ToString();
-                    request.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
 
-                    PrepareRequest(client, request, url);
+                    PrepareRequest(client_, request_, url_);
 
-                    var response = await client.SendAsync(request, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse = true;
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
                     try
                     {
-                        var headers = System.Linq.Enumerable.ToDictionary(response.Headers, h => h.Key, h => h.Value);
-                        if (response.Content != null && response.Content.Headers != null)
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
                         {
-                            foreach (var item in response.Content.Headers)
-                                headers[item.Key] = item.Value;
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
                         }
 
-                        ProcessResponse(client, response);
+                        ProcessResponse(client_, response_);
 
-                        var status = (int)response.StatusCode;
-                        if (status == 204)
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 204)
                         {
-                            return await response.Content.ReadAsStringAsync();
+                            return await response_.Content.ReadAsStringAsync();
                         }
                         else
                         {
-                            var responseData = response.Content == null ? null : await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status + ").", status, responseData, headers, null);
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new RebrickableApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
                         }
                     }
                     finally
                     {
-                        if (disposeResponse)
-                            response.Dispose();
+                        if (disposeResponse_)
+                            response_.Dispose();
                     }
                 }
             }
             finally
             {
-                if (disposeClient)
-                    client.Dispose();
+                if (disposeClient_)
+                    client_.Dispose();
             }
         }
 
