@@ -50,17 +50,23 @@ jobs:
     needs: setup
     outputs:
       schema_new_hash: ${{ steps.schema_new.outputs.hash }}
-    steps:
-      
-      - name: Download a file
-        run: curl $REBRICKABLE_API_URL -o rebrickable_schema.json
-      
-      - name: Set current schema hash
-        run: cat rebrickable_schema.json | base64 | sha256sum | awk '{print $1}'
-      
+    steps:        
       - name: Set current schema hash
         id: schema_new
-        run: echo "::set-output name=hash::$(cat rebrickable_schema.json | base64 | sha256sum | awk '{print $1}')"
+        shell : pwsh
+        run: |
+              Invoke-WebRequest $ENV::REBRICKABLE_API_URL
+              $Content = get-content schema.json
+              $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
+              $Encoded = [System.Convert]::ToBase64String($Bytes)
+              
+              $stringAsStream = [System.IO.MemoryStream]::new()
+              $writer = [System.IO.StreamWriter]::new($stringAsStream)
+              $writer.write($Encoded)
+              $writer.Flush()
+              $stringAsStream.Position = 0
+              $sha = Get-FileHash -InputStream $stringAsStream | Select-Object Hash
+              echo "::set-output name=hash::$sha"
       
   generate:
     if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
