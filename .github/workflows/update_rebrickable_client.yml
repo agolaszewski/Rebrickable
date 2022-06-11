@@ -55,7 +55,7 @@ jobs:
         id: schema_new
         shell : pwsh
         run: |
-              Invoke-WebRequest $ENV::REBRICKABLE_API_URL
+              Invoke-WebRequest $Env:REBRICKABLE_API_URL
               $Content = get-content schema.json
               $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
               $Encoded = [System.Convert]::ToBase64String($Bytes)
