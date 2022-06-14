@@ -55,7 +55,7 @@ jobs:
         id: schema_new
         shell : pwsh
         run: |
-              Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi" -OutVariable $Content
+              $Content = (Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi").RawContent 
               $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
               $Encoded = [System.Convert]::ToBase64String($Bytes)
               echo $Encoded
