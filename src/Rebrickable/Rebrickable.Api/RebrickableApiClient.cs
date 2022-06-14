@@ -18,7 +18,546 @@ namespace RebrickableApi
     using System = global::System; using Newtonsoft.Json;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public sealed  partial class RebrickableClient 
+    public partial interface IRebrickableClient
+    {
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Colors.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoColorsListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Color.
+        /// </summary>
+        /// <param name="id">A unique value identifying this color.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoColorsReadAsync(string id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Element ID.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoElementsReadAsync(string element_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of Minifigs.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoMinifigsListAsync(int? page = null, int? page_size = null, double? min_parts = null, double? max_parts = null, string in_set_num = null, string in_theme_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details for a specific Minifig.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoMinifigsReadAsync(string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Inventory Parts in this Minifig.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoMinifigsPartsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of Sets a Minifig has appeared in.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Part Categories.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartCategoriesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Part Category.
+        /// </summary>
+        /// <param name="id">A unique integer value identifying this part category.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartCategoriesReadAsync(int id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of Parts.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartsListAsync(int? page = null, int? page_size = null, string part_num = null, string part_nums = null, string part_cat_id = null, string color_id = null, string bricklink_id = null, string brickowl_id = null, string lego_id = null, string ldraw_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Part.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartsReadAsync(string part_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Colors a Part has appeared in.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartsColorsListAsync(string part_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Part/Color combination.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartsColorsReadAsync(string part_num, string color_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Sets the Part/Color combination has appeard in.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoPartsColorsSetsListAsync(string part_num, string color_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of Sets, optionally filtered by any of the below parameters.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<LegoSetsListAsyncResponse> LegoSetsListAsync(int? page = null, int? page_size = null, string theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details for a specific Set.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoSetsReadAsync(string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of MOCs which are Alternate Builds of a specific Set - i.e. all parts in the MOC can
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoSetsAlternatesListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Inventory Minifigs in this Set.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Inventory Parts in this Set.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoSetsPartsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all Inventory Sets in this Set.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoSetsSetsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Return all Themes
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoThemesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Return details for a specific Theme
+        /// </summary>
+        /// <param name="id">A unique integer value identifying this theme.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> LegoThemesReadAsync(int id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> SwaggerListAsync(System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Generate a User Token to be used for authorising user account actions in subsequent calls. Username can be either
+        /// </summary>
+        /// <param name="username">Username (or email) of user</param>
+        /// <param name="password">Password of user</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> Users_tokenCreateAsync(string username, string password, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the available Badges
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersBadgesListAsync(int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Badge
+        /// </summary>
+        /// <param name="id">A unique integer value identifying this badge.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersBadgesReadAsync(int id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Parts in all the user's Part Lists as well as the Parts inside Sets in the user's Set Lists.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersAllpartsListAsync(string user_token, int? page = null, int? page_size = null, string part_num = null, double? part_cat_id = null, double? color_id = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Find out how many parts the user needs to build the specified Set.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersBuildReadAsync(string user_token, string set_num, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Lost Parts from the user's LEGO collection.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersLostPartsListAsync(string user_token, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add one or more Lost Parts to the user.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersLostPartsCreateAsync(string user_token, int inv_part_id, int? lost_quantity = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Remove the Lost Part from the user.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersLostPartsDeleteAsync(string user_token, string id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Minifigs in all the user's Sets. Note that this is a read-only list as Minifigs are
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersMinifigsListAsync(string user_token, int? page = null, int? page_size = null, string fig_set_num = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the user's Part Lists.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsListAsync(string user_token, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add a new Part List.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsCreateAsync(string user_token, string name, bool? is_buildable = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Part List.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsReadAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Replace an existing Part List's details.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsUpdateAsync(string user_token, string list_id, string name, bool? is_buildable = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing Part List's details.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartialUpdateAsync(string user_token, string list_id, bool? is_buildable = null, string name = null, int? num_parts = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a Part List and all it's Parts.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsDeleteAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Parts in a specific Part List.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartsListAsync(string user_token, string list_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add one or more Parts to the Part List.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartsCreateAsync(string user_token, string list_id, string part_num, int quantity, int color_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Part in the Part List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartsReadAsync(string user_token, string part_num, string list_id, string color_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Replace an existing Part's details in the Part List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartsUpdateAsync(string user_token, string part_num, string list_id, string color_id, int quantity, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a Part from the Part List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartlistsPartsDeleteAsync(string user_token, string part_num, string list_id, string color_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Parts in all the user's Part Lists.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersPartsListAsync(string user_token, int? page = null, int? page_size = null, string part_num = null, double? part_cat_id = null, double? color_id = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific user.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersProfileReadAsync(string user_token, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the user's Set Lists.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsListAsync(string user_token, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add a new Set List.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsCreateAsync(string user_token, string name, bool? is_buildable = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Set List.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsReadAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Replace an existing Set List's details.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsUpdateAsync(string user_token, string list_id, string name, bool? is_buildable = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing Set List's details.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsPartialUpdateAsync(string user_token, string list_id, bool? is_buildable = null, string name = null, int? num_sets = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a Set List and all it's Sets.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsDeleteAsync(string user_token, string list_id, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Sets in a specific Set List.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsListAsync(string user_token, string list_id, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add one or more Sets to the Set List. Existing Sets are unaffected.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsCreateAsync(string user_token, string list_id, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Set in the Set List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsReadAsync(string user_token, string set_num, string list_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Replace an existing Set's details in the Set List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsUpdateAsync(string user_token, string set_num, string list_id, int? quantity = null, bool? include_spares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing Set's details in the Set List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsPartialUpdateAsync(string user_token, string set_num, string list_id, int? quantity = null, bool? include_spares = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete a Set from the Set List.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetlistsSetsDeleteAsync(string user_token, string set_num, string list_id, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get a list of all the Sets in the user's LEGO collection.
+        /// </summary>
+        /// <param name="page">A page number within the paginated result set.</param>
+        /// <param name="page_size">Number of results to return per page.</param>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsListAsync(string user_token, int? page = null, int? page_size = null, string set_num = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Add one or more Sets to the user's LEGO collection. Existing Sets are unaffected.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsCreateAsync(string user_token, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Synchronise a user's Sets to the POSTed list.
+        /// </summary>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsSyncCreateAsync(string user_token, string set_num, int? quantity = null, bool? include_spares = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Get details about a specific Set in the user's LEGO collection.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsReadAsync(string user_token, string set_numPath, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Update an existing Set's quantity in all Set Lists. This PUT call is different to others in that it will create
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsUpdateAsync(string user_token, string set_numPath, int? quantity = null, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// Delete the Set from all the user's Set Lists.
+        /// </summary>
+        /// <param name="ordering">Which field to use when ordering the results.</param>
+        /// <param name="search">A search term.</param>
+        /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<string> UsersSetsDeleteAsync(string user_token, string set_numPath, string set_numQuery = null, double? theme_id = null, double? min_year = null, double? max_year = null, double? min_parts = null, double? max_parts = null, string ordering = null, string search = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.16.1.0 (NJsonSchema v10.7.2.0 (Newtonsoft.Json v13.0.0.0))")]
+    public sealed  partial class RebrickableClient : IRebrickableClient
     {
         private string _baseUrl = "https://rebrickable.com";
         private System.Net.Http.HttpClient _httpClient;
