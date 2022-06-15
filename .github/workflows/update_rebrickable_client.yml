@@ -1,10 +1,10 @@
 name: Update Rebrickable Client
 
 on:
-  push:
-    paths: ".github/workflows/update_rebrickable_client.yml"
-  schedule:
-    - cron: "0 2 * * *"
+  #push:
+    #paths: ".github/workflows/update_rebrickable_client.yml"
+  #schedule:
+    #- cron: "0 2 * * *"
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
