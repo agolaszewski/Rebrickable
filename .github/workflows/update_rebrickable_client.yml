@@ -1,10 +1,10 @@
 name: Update Rebrickable Client
 
 on:
-  #push:
-    #paths: ".github/workflows/update_rebrickable_client.yml"
-  #schedule:
-    #- cron: "0 2 * * *"
+  push:
+    paths: ".github/workflows/update_rebrickable_client.yml"
+  schedule:
+    - cron: "0 2 * * *"
 
 env:
   REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
@@ -55,7 +55,9 @@ jobs:
         id: schema_new
         shell : pwsh
         run: |
-              $Content = (Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi").RawContent 
+              $Content = Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi"
+              $Content = $([String]::new($Content.Content))
+              
               $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
               $Encoded = [System.Convert]::ToBase64String($Bytes)
               echo $Encoded
