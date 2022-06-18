@@ -55,20 +55,12 @@ for (int index = 0; index < charList.Count;)
 }
 
 generatedClientFile = string.Join("", charList);
-generatedClientFile = generatedClientFile
-    .Replace(
-        $"public async System.Threading.Tasks.Task<string> LegoSetsListAsync",
-        $"public async System.Threading.Tasks.Task<LegoSetsListAsyncResponse> LegoSetsListAsync");
 
-generatedClientFile = generatedClientFile
-    .Replace(
-        $"System.Threading.Tasks.Task<string> LegoSetsListAsync",
-        $"System.Threading.Tasks.Task<LegoSetsListAsyncResponse> LegoSetsListAsync");
+generatedClientFile = ReplaceSignature("LegoSetsListAsync", generatedClientFile);
+generatedClientFile = ReplaceSignature("LegoThemesListAsync", generatedClientFile);
 
-var legoSetsListAsyncIndex = generatedClientFile.LastIndexOf("LegoSetsListAsync");
-var search = generatedClientFile.Substring(legoSetsListAsyncIndex);
-var rest = ReplaceFirst(search, "return await response_.Content.ReadAsStringAsync();", "return JsonConvert.DeserializeObject<LegoSetsListAsyncResponse>(await response_.Content.ReadAsStringAsync());");
-generatedClientFile = generatedClientFile.Substring(0, legoSetsListAsyncIndex) + rest;
+generatedClientFile = ReplaceReturn("LegoSetsListAsync", generatedClientFile);
+generatedClientFile = ReplaceReturn("LegoThemesListAsync", generatedClientFile);
 
 string ReplaceFirst(string text, string search, string replace)
 {
@@ -78,6 +70,29 @@ string ReplaceFirst(string text, string search, string replace)
         return text;
     }
     return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+}
+
+string ReplaceReturn(string method, string generated)
+{
+    var index = generated.LastIndexOf(method);
+    var search = generated.Substring(index);
+    var rest = ReplaceFirst(search, "return await response_.Content.ReadAsStringAsync();", $"return JsonConvert.DeserializeObject<{method}Response>(await response_.Content.ReadAsStringAsync());");
+    return generated.Substring(0, index) + rest;
+}
+
+string ReplaceSignature(string method, string generated)
+{
+    generated = generated
+        .Replace(
+            $"public async System.Threading.Tasks.Task<string> {method}",
+            $"public async System.Threading.Tasks.Task<{method}Response> {method}");
+
+    generated = generated
+        .Replace(
+            $"System.Threading.Tasks.Task<string> {method}",
+            $"System.Threading.Tasks.Task<{method}Response> {method}");
+
+    return generated;
 }
 
 Console.Write(generatedClientFile);
