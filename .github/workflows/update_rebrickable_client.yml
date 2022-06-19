@@ -60,7 +60,6 @@ jobs:
               
               $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
               $Encoded = [System.Convert]::ToBase64String($Bytes)
-              echo $Encoded
               
               $stringAsStream = [System.IO.MemoryStream]::new()
               $writer = [System.IO.StreamWriter]::new($stringAsStream)
