@@ -57,6 +57,8 @@ jobs:
         run: |
               $Content = Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi"
               $Content = $([String]::new($Content.Content))
+              $Content = $Content -replace "\s", ""
+              echo $Content
               
               $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
               $Encoded = [System.Convert]::ToBase64String($Bytes)
