@@ -60,15 +60,8 @@ jobs:
               $Content = $Content -replace "\s", ""
               echo $Content
               
-              $Bytes = [System.Text.Encoding]::UTF8.GetBytes($Content)
-              $Encoded = [System.Convert]::ToBase64String($Bytes)
-              
-              $stringAsStream = [System.IO.MemoryStream]::new()
-              $writer = [System.IO.StreamWriter]::new($stringAsStream)
-              $writer.write($Encoded)
-              $writer.Flush()
-              $stringAsStream.Position = 0
-              $sha = Get-FileHash -InputStream $stringAsStream | Select-Object Hash
+              Out-File -FilePath ./schema.json -InputObject $Content -Encoding UTF8
+              $sha = Get-FileHash ./schema.json | Select-Object Hash
               echo "::set-output name=hash::$sha"
               
               Out-File -FilePath ./schema.json -InputObject $Content -Encoding UTF8
