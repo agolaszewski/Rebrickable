@@ -1,6 +1,7 @@
 name: Rebrickable.Api Build
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'src/Rebrickable/Rebrickable.Api/**'
