@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 //https://json2csharp.com/
-namespace RebrickableApi
+namespace Rebrickable.Api
 {
     public record LegoSetsListAsyncResponse(
         [property: JsonProperty("count")] int Count,
@@ -26,7 +27,7 @@ namespace RebrickableApi
     public record LegoThemesListAsyncResponse(
         [property: JsonProperty("count")] int Count,
         [property: JsonProperty("next")] string Next,
-        [property: JsonProperty("previous")] object Previous,
+        [property: JsonProperty("previous")] string Previous,
         [property: JsonProperty("results")] IReadOnlyList<LegoThemesListAsyncResponse.Result> Results)
     {
         public record Result(
@@ -35,4 +36,15 @@ namespace RebrickableApi
             [property: JsonProperty("name")] string Name
         );
     }
+
+    public record LegoSetsReadAsyncResponse(
+        [property: JsonPropertyName("set_num")] string SetNum,
+        [property: JsonPropertyName("name")] string Name,
+        [property: JsonPropertyName("year")] int Year,
+        [property: JsonPropertyName("theme_id")] int ThemeId,
+        [property: JsonPropertyName("num_parts")] int NumParts,
+        [property: JsonPropertyName("set_img_url")] string SetImgUrl,
+        [property: JsonPropertyName("set_url")] string SetUrl,
+        [property: JsonPropertyName("last_modified_dt")] DateTime LastModifiedDt
+    );
 }

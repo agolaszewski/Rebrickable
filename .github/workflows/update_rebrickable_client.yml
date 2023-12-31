@@ -1,134 +1,16 @@
-name: Update Rebrickable Client
-
+name: Rebrickable.Api Build
 
 on:
   push:
-    paths: ".github/workflows/update_rebrickable_client.yml"
+    paths:
+      - 'src/Rebrickable/Rebrickable.Api/**'
+concurrency: 
+  group: ${GITHUB_REF#refs/heads/} 
+  cancel-in-progress: true
 
-env:
-  REBRICKABLE_API_URL: "https://rebrickable.com/api/v3/swagger/?format=openapi"
 jobs:
-  setup:
+  Publish:
     runs-on: ubuntu-latest
-    outputs:
-      schema_hash: ${{ steps.configuration.outputs.schema_hash }}
-      package_version: ${{ steps.configuration.outputs.package_version }}
-    steps:
-      - uses: actions/checkout@v2 
-      
-      - name: Event
-        run: echo '${{ toJSON(github) }}'
-      
-      - name: Update Permissions
-        run: chmod 777 ./settings.json
-      
-      - name: Set env vars from settings.json
-        id: configuration
-        run: | 
-               if [[ -f ./settings.json ]]
-               then
-                    settings=$(echo $(cat ./settings.json))
-               fi
-               
-               if [ -z $settings ]
-               then
-                    echo "::set-output name=schema_hash::$(echo '1' )"
-                    echo "::set-output name=package_version::$(echo '1' )"
-               else
-                    echo "::set-output name=schema_hash::$(echo $settings | jq -r '.schemaHash' )"
-                    echo "::set-output name=package_version::$(echo $settings | jq -r '.packageVersion' )"
-               fi
-               
-      - name: Test Variables
-        run : |
-              echo ${{ steps.configuration.outputs.schema_hash }}
-              echo ${{ steps.configuration.outputs.package_version }}
-              
-  check:
-    runs-on: ubuntu-latest
-    needs: setup
-    outputs:
-      schema_new_hash: ${{ steps.schema_new.outputs.hash }}
-    steps:        
-      - name: Set current schema hash
-        id: schema_new
-        shell : pwsh
-        run: |
-              $Content = Invoke-WebRequest -Uri "https://rebrickable.com/api/v3/swagger/?format=openapi"
-              $Content = $([String]::new($Content.Content))
-              $Content = $Content -replace "\s", ""
-              echo $Content
-              
-              Out-File -FilePath ./schema.json -InputObject $Content -Encoding UTF8
-              $sha = Get-FileHash ./schema.json | Select-Object Hash
-              echo "::set-output name=hash::$sha"
-              
-              Out-File -FilePath ./schema.json -InputObject $Content -Encoding UTF8
-              
-      - name: Save schema
-        if: ${{ steps.schema_new.outputs.hash != needs.setup.outputs.schema_hash }}
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          # Artifact name
-          name: Schema
-          path: ./schema.json
-  
-  generate:
-    if: ${{ needs.check.outputs.schema_new_hash != needs.setup.outputs.schema_hash }}
-    needs: [ setup, check ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Test Variables
-        run : |
-              echo ${{ needs.check.outputs.schema_new_hash }}
-              echo ${{ needs.setup.outputs.schema_hash }}
-              
-      - name: Download runner
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: rebrickable_generator_build.yml
-          workflow_conclusion: success
-
-      - name: Update Executable Permissions
-        working-directory: ./RebrickableGeneratorExecutable
-        run: chmod 777 Rebrickable.Generator
-
-      - name: Update Client File
-        run: |
-          ./RebrickableGeneratorExecutable/Rebrickable.Generator ${{ env.REBRICKABLE_API_URL }} >> ./RebrickableGeneratorExecutable/RebrickableApiClient.cs
-
-      - name: Upload Client File Artifact
-        uses: actions/upload-artifact@v3.0.0
-        with:
-          name: RebrickableApiClient
-          path: ./RebrickableGeneratorExecutable/RebrickableApiClient.cs
-          retention-days: 5
-
-  commit:
-    runs-on: ubuntu-latest
-    needs: generate
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Download RebrickableApiClient Artifact
-        uses: actions/download-artifact@v3.0.0
-        with:
-          name: RebrickableApiClient
-      
-      - name: Copy Client
-        run: mv ./RebrickableApiClient.cs ./src/Rebrickable/Rebrickable.Api/
-
-      - name: Commit New Client
-        uses: EndBug/add-and-commit@v9.0.0
-        with:
-          author_name: "Automation"
-          message: "New Client File"
-          
-  publish:
-    runs-on: ubuntu-latest
-    #if : false
-    needs : [ setup, commit ]
     defaults:
       run:
         working-directory: ./src/Rebrickable/Rebrickable.Api/
@@ -143,37 +25,8 @@ jobs:
       - name: Build
         run: dotnet build Rebrickable.Api.csproj -c Release --no-restore
       - name: Pack
-        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=3.0.${{ needs.setup.outputs.package_version }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
-      - name: Push to Nuget
-        run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
-  post-setup:
-      runs-on: ubuntu-latest
-      needs: [ setup, check, publish ]
-      steps:
-        - uses: actions/checkout@v2
-        - run: git pull
-        - name: Update Settings
-          shell: pwsh
-          run: |
-          
-               $newPackageVersion = ${{ needs.setup.outputs.package_version }} + 1
-               $settings = [PSCustomObject]@{
-                    schemaHash     = '${{ needs.check.outputs.schema_new_hash }}'
-                    packageVersion = $newPackageVersion
-               }
-               Write-Host ($settings | Format-Table | Out-String)
-               $settings | ConvertTo-Json | Out-File "./settings.json"
-               Get-Content -Path "./settings.json"
-               
-        - name: Commit Settings
-          uses: EndBug/add-and-commit@v9.0.0
-          with:
-            author_name: "Automation"
-            message: "Update settings.json"
-            pull: ' '
+        run: dotnet pack Rebrickable.Api.csproj -p:PackageVersion=3.1.${{ env.NUGET_VERSION }} --no-build --configuration Release --include-symbols -p:SymbolPackageFormat=snupkg -o .
+      #- name: Push to Nuget
+      #  run: dotnet nuget push *.nupkg --api-key ${{secrets.NUGET_KEY }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
         
-  
-    
-
-
-
+      

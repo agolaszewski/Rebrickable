@@ -3,7 +3,6 @@ using NSwag.CodeGeneration.CSharp;
 using NSwag.CodeGeneration.OperationNameGenerators;
 
 var apiUrl = args.Length > 0 ? args[0] : "https://rebrickable.com/api/v3/swagger/?format=openapi";
-var key = args.Length > 1 ? args[1] : "";
 
 var document = await OpenApiDocument.FromUrlAsync(apiUrl);
 var clientSettings = new CSharpClientGeneratorSettings
@@ -11,7 +10,7 @@ var clientSettings = new CSharpClientGeneratorSettings
     ClassName = "RebrickableClient",
     CSharpGeneratorSettings =
     {
-        Namespace = "RebrickableApi",
+        Namespace = "Rebrickable.Api",
     },
     InjectHttpClient = true,
     ExceptionClass = "RebrickableApiException",
@@ -58,9 +57,11 @@ generatedClientFile = string.Join("", charList);
 
 generatedClientFile = ReplaceSignature("LegoSetsListAsync", generatedClientFile);
 generatedClientFile = ReplaceSignature("LegoThemesListAsync", generatedClientFile);
+generatedClientFile = ReplaceSignature("LegoSetsReadAsync", generatedClientFile);
 
 generatedClientFile = ReplaceReturn("LegoSetsListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoThemesListAsync", generatedClientFile);
+generatedClientFile = ReplaceReturn("LegoSetsReadAsync", generatedClientFile);
 
 string ReplaceFirst(string text, string search, string replace)
 {
@@ -95,4 +96,4 @@ string ReplaceSignature(string method, string generated)
     return generated;
 }
 
-Console.Write(generatedClientFile);
+File.WriteAllText("..//..//..//..//Rebrickable.Api//RebrickableApiClient.cs", generatedClientFile);
