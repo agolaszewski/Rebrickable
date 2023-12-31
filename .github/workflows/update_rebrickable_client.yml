@@ -34,7 +34,10 @@ jobs:
         with:
           script: |
             github.rest.actions.updateRepoVariable({
-              "NUGET_VERSION",
-              "1",
-            });     
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "NUGET_VERSION",
+              value: "1"
+            });
+                 
       
