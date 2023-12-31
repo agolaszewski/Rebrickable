@@ -58,10 +58,14 @@ generatedClientFile = string.Join("", charList);
 generatedClientFile = ReplaceSignature("LegoSetsListAsync", generatedClientFile);
 generatedClientFile = ReplaceSignature("LegoThemesListAsync", generatedClientFile);
 generatedClientFile = ReplaceSignature("LegoSetsReadAsync", generatedClientFile);
+generatedClientFile = ReplaceSignature("LegoSetsMinifigsListAsync", generatedClientFile);
+generatedClientFile = ReplaceSignature("LegoMinifigsSetsListAsync", generatedClientFile);
 
 generatedClientFile = ReplaceReturn("LegoSetsListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoThemesListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoSetsReadAsync", generatedClientFile);
+generatedClientFile = ReplaceReturn("LegoSetsMinifigsListAsync", generatedClientFile);
+generatedClientFile = ReplaceReturn("LegoMinifigsSetsListAsync", generatedClientFile);
 
 string ReplaceFirst(string text, string search, string replace)
 {

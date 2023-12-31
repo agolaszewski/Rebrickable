@@ -82,7 +82,7 @@ namespace Rebrickable.Api
         /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<LegoMinifigsSetsListAsyncResponse> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -183,7 +183,7 @@ namespace Rebrickable.Api
         /// <param name="page">A page number within the paginated result set.</param>
         /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<string> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<LegoSetsMinifigsListAsyncResponse> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
@@ -1063,7 +1063,7 @@ namespace Rebrickable.Api
         /// <param name="page_size">Number of results to return per page.</param>
         /// <param name="ordering">Which field to use when ordering the results.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<LegoMinifigsSetsListAsyncResponse> LegoMinifigsSetsListAsync(string set_num, int? page = null, int? page_size = null, string ordering = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (set_num == null)
                 throw new System.ArgumentNullException("set_num");
@@ -1116,7 +1116,7 @@ namespace Rebrickable.Api
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return await response_.Content.ReadAsStringAsync();
+                            return JsonConvert.DeserializeObject<LegoMinifigsSetsListAsyncResponse>(await response_.Content.ReadAsStringAsync());
                         }
                         else
                         {
@@ -1976,7 +1976,7 @@ namespace Rebrickable.Api
         /// <param name="page">A page number within the paginated result set.</param>
         /// <param name="page_size">Number of results to return per page.</param>
         /// <exception cref="RebrickableApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<LegoSetsMinifigsListAsyncResponse> LegoSetsMinifigsListAsync(string set_num, int? page = null, int? page_size = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
             if (set_num == null)
                 throw new System.ArgumentNullException("set_num");
@@ -2025,7 +2025,7 @@ namespace Rebrickable.Api
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            return await response_.Content.ReadAsStringAsync();
+                            return JsonConvert.DeserializeObject<LegoSetsMinifigsListAsyncResponse>(await response_.Content.ReadAsStringAsync());
                         }
                         else
                         {

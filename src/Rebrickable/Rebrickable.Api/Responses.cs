@@ -47,4 +47,34 @@ namespace Rebrickable.Api
         [property: JsonPropertyName("set_url")] string SetUrl,
         [property: JsonPropertyName("last_modified_dt")] DateTime LastModifiedDt
     );
+
+    public record LegoSetsMinifigsListAsyncResponse(
+        [property: JsonProperty("count")] int Count,
+        [property: JsonProperty("next")] string Next,
+        [property: JsonProperty("previous")] string Previous,
+        [property: JsonProperty("results")] IReadOnlyList<LegoSetsMinifigsListAsyncResponse.Result> Results)
+    {
+        public record Result(
+            [property: JsonProperty("id")] int Id,
+            [property: JsonProperty("set_num")] string SetNum,
+            [property: JsonProperty("set_name")] string SetName,
+            [property: JsonProperty("quantity")] int Quantity,
+            [property: JsonProperty("set_img_url")] string SetImgUrl
+        );
+    }
+
+    public record LegoMinifigsSetsListAsyncResponse(
+        [property: JsonProperty("count")] int Count,
+        [property: JsonProperty("next")] string Next,
+        [property: JsonProperty("previous")] string Previous,
+        [property: JsonProperty("results")] IReadOnlyList<LegoMinifigsSetsListAsyncResponse.Result> Results)
+    {
+        public record Result(
+            [property: JsonProperty("id")] int Id,
+            [property: JsonProperty("set_num")] string SetNum,
+            [property: JsonProperty("set_name")] string SetName,
+            [property: JsonProperty("quantity")] int Quantity,
+            [property: JsonProperty("set_img_url")] string SetImgUrl
+        );
+    }
 }

@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net6.0</TargetFramework>
 	  <PackageId>Rebrickable.Api</PackageId>
 	  <Authors>Andrzej Gołaszewski</Authors>
 	  <Description>Rebrickable Api client for .net</Description>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <PropertyGroup>
+  	<Version>3.2.0</Version>
+  </PropertyGroup>	
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
