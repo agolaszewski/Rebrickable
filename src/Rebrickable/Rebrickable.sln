@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebrickable.Generator", "Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rebrickable.Api", "Rebrickable.Api\Rebrickable.Api.csproj", "{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebrickable.Console", "Rebrickable.Console\Rebrickable.Console.csproj", "{8DA77C7F-C25A-47F3-9E70-8B869C441BD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{621E277B-A6D9-4A22-9EAF-B1DDCEBA568B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DA77C7F-C25A-47F3-9E70-8B869C441BD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DA77C7F-C25A-47F3-9E70-8B869C441BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DA77C7F-C25A-47F3-9E70-8B869C441BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DA77C7F-C25A-47F3-9E70-8B869C441BD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
