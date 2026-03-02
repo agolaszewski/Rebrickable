@@ -76,4 +76,20 @@ namespace Rebrickable.Api
             [property: JsonProperty("set_img_url")] string SetImgUrl
         );
     }
+
+    public record LegoMinifigsListAsyncResponse(
+        [property: JsonProperty("count")] int Count,
+        [property: JsonProperty("next")] string Next,
+        [property: JsonProperty("previous")] string Previous,
+        [property: JsonProperty("results")] IReadOnlyList<LegoMinifigsListAsyncResponse.Result> Results)
+    {
+        public record Result(
+            [property: JsonProperty("set_num")] string SetNum,
+            [property: JsonProperty("name")] string Name,
+            [property: JsonProperty("num_parts")] int NumParts,
+            [property: JsonProperty("set_img_url")] string SetImgUrl,
+            [property: JsonProperty("set_url")] string SetUrl,
+            [property: JsonProperty("last_modified_dt")] DateTime LastModifiedDt
+        );
+    }
 }

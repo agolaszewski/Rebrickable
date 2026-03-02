@@ -60,13 +60,14 @@ generatedClientFile = ReplaceSignature("LegoThemesListAsync", generatedClientFil
 generatedClientFile = ReplaceSignature("LegoSetsReadAsync", generatedClientFile);
 generatedClientFile = ReplaceSignature("LegoSetsMinifigsListAsync", generatedClientFile);
 generatedClientFile = ReplaceSignature("LegoMinifigsSetsListAsync", generatedClientFile);
+generatedClientFile = ReplaceSignature("LegoMinifigsListAsync", generatedClientFile);
 
 generatedClientFile = ReplaceReturn("LegoSetsListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoThemesListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoSetsReadAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoSetsMinifigsListAsync", generatedClientFile);
 generatedClientFile = ReplaceReturn("LegoMinifigsSetsListAsync", generatedClientFile);
-
+generatedClientFile = ReplaceReturn("LegoMinifigsListAsync", generatedClientFile);
 string ReplaceFirst(string text, string search, string replace)
 {
     int pos = text.IndexOf(search);

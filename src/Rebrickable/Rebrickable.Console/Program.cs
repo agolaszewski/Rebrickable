@@ -21,7 +21,7 @@ namespace Rebrickable.Console
             try
             {
                 var r = new RebrickableClient(httpClient);
-                var xd = await r.LegoSetsReadAsync("42083-1");
+                var xd = await r.LegoMinifigsListAsync(1,10);
             }
             catch (Exception e)
             {

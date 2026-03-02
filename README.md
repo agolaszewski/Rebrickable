@@ -5,5 +5,27 @@
 Rebrickable API
 https://rebrickable.com/api/
 
+## Supported Methods
+
+The following API methods are supported by the generated client:
+
+- `LegoSetsListAsync`  
+  List LEGO sets with optional filters and pagination.
+
+- `LegoThemesListAsync`  
+  List LEGO themes.
+
+- `LegoSetsReadAsync`  
+  Get details for a specific LEGO set.
+
+- `LegoSetsMinifigsListAsync`  
+  List minifigs included in a specific LEGO set.
+
+- `LegoMinifigsSetsListAsync`  
+  List sets that include a specific minifig.
+
+- `LegoMinifigsListAsync`  
+  List LEGO minifigs with optional filters and pagination.
+
 
 
